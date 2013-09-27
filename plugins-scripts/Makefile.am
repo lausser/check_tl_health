@@ -13,7 +13,7 @@ libexec_SCRIPTS=check_tl_health
 MY_MODULES=
 EXTRA_MODULES=\
   Nagios/MiniPlugin.pm \
-  TL/HP/StoreEver.pm
+  TL/HP/StoreEver.pm \
   TL/HP.pm \
   TL/IFMIB/Component/LinkAggregation.pm \
   TL/IFMIB/Component/InterfaceSubsystem.pm \
