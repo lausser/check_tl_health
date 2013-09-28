@@ -1,4 +1,4 @@
-package NWC::IFMIB;
+package TL::IFMIB;
 
 use strict;
 

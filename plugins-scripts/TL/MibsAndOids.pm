@@ -1,4 +1,4 @@
-$NWC::Device::mibs_and_oids = {
+$TL::Device::mibs_and_oids = {
   'MIB-II' => {
       sysDescr => '1.3.6.1.2.1.1.1',
       sysObjectID => '1.3.6.1.2.1.1.2',
@@ -109,7 +109,7 @@ $NWC::Device::mibs_and_oids = {
   },
 };
 
-$NWC::Device::definitions = {
+$TL::Device::definitions = {
   'HP-httpManageable-MIB' => {
      hpHttpMgHealth => {
        1 => 'unknown',

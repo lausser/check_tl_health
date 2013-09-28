@@ -5,11 +5,11 @@ use Digest::MD5 qw(md5_hex);;
 
 use vars qw ($PROGNAME $REVISION $CONTACT $TIMEOUT $STATEFILESDIR $needs_restart %commandline);
 
-$PROGNAME = "check_nwc_health";
+$PROGNAME = "check_tl_health";
 $REVISION = '$Revision: #PACKAGE_VERSION# $';
 $CONTACT = 'gerhard.lausser@consol.de';
 $TIMEOUT = 60;
-$STATEFILESDIR = '/var/tmp/check_nwc_health';
+$STATEFILESDIR = '/var/tmp/check_tl_health';
 
 use constant OK         => 0;
 use constant WARNING    => 1;
@@ -147,7 +147,7 @@ my $plugin = Nagios::MiniPlugin->new(
         '  ...]',
     version => $REVISION,
     blurb => 'This plugin checks various parameters of network components ',
-    url => 'http://labs.consol.de/nagios/check_nwc_health',
+    url => 'http://labs.consol.de/nagios/check_tl_health',
     timeout => 60,
     shortname => '',
 );
@@ -309,7 +309,7 @@ $plugin->add_arg(
     help => "--lookback
    The amount of time you want to look back when calculating average rates.
    Use it for mode interface-errors or interface-usage. Without --lookback
-   the time between two runs of check_nwc_health is the base for calculations.
+   the time between two runs of check_tl_health is the base for calculations.
    If you want your checkresult to be based for example on the past hour,
    use --lookback 3600. ",
     required => 0,
@@ -424,7 +424,7 @@ if ($plugin->opts->snmpwalk && $plugin->opts->hostname && $plugin->opts->mode eq
 }
 if (! $plugin->opts->statefilesdir) {
   if (exists $ENV{OMD_ROOT}) {
-    $plugin->override_opt('statefilesdir', $ENV{OMD_ROOT}."/var/tmp/check_nwc_health");
+    $plugin->override_opt('statefilesdir', $ENV{OMD_ROOT}."/var/tmp/check_tl_health");
   } else {
     $plugin->override_opt('statefilesdir', $STATEFILESDIR);
   }
@@ -458,21 +458,21 @@ if ($plugin->opts->name && $plugin->opts->name =~ /(%22)|(%27)/) {
 }
 
 $SIG{'ALRM'} = sub {
-  printf "UNKNOWN - check_nwc_health timed out after %d seconds\n", 
+  printf "UNKNOWN - check_tl_health timed out after %d seconds\n", 
       $plugin->opts->timeout;
   exit $ERRORS{UNKNOWN};
 };
 alarm($plugin->opts->timeout);
 
-$NWC::Device::plugin = $plugin;
-$NWC::Device::mode = (
+$TL::Device::plugin = $plugin;
+$TL::Device::mode = (
     map { $_->[0] }
     grep {
        ($plugin->opts->mode eq $_->[1]) ||
        ( defined $_->[2] && grep { $plugin->opts->mode eq $_ } @{$_->[2]})
     } @modes
 )[0];
-my $server = NWC::Device->new( runtime => {
+my $server = TL::Device->new( runtime => {
 
     plugin => $plugin,
     options => {
@@ -504,7 +504,7 @@ if (! $plugin->check_messages()) {
 my ($code, $message) = $plugin->opts->multiline ? 
     $plugin->check_messages(join => "\n", join_all => ', ') :
     $plugin->check_messages(join => ', ', join_all => ', ');
-$message .= sprintf "\n%s\n", join("\n", @{$NWC::Device::info})
+$message .= sprintf "\n%s\n", join("\n", @{$TL::Device::info})
     if $plugin->opts->verbose >= 1;
 #printf "%s\n", Data::Dumper::Dumper($plugin->{info});
 $plugin->nagios_exit($code, $message);
