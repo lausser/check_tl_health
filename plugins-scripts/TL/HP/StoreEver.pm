@@ -8,11 +8,7 @@ our @ISA = qw(TL::HP);
 
 sub init {
   my $self = shift;
-  $self->{components} = {
-      cpu_subsystem => undef,
-      memory_subsystem => undef,
-      environmental_subsystem => undef,
-  };
+  $self->{devices} = [];
   if (! $self->check_messages()) {
     if ($self->mode =~ /device::hardware::health/) {
       $self->analyze_environmental_subsystem();
@@ -33,11 +29,27 @@ sub init {
 sub analyze_environmental_subsystem {
   my $self = shift;
   $self->{'hpHttpMgHealth'} =
-      $self->get_snmp_object('HP-httpManageable-MIB', 'hpHttpMgHealth');
+      $self->get_snmp_object('SEMI-MIB', 'hpHttpMgHealth');
+  foreach ($self->get_snmp_table_objects(
+      'SEMI-MIB', 'hpHttpMgDeviceTable')) {
+    push(@{$self->{devices}},
+        TL::HP::StoreEver::Device->new(%{$_}));
+  }
 }
 
 sub check_environmental_subsystem {
   my $self = shift;
-  printf "%s\n", $self->{'hpHttpMgHealth'};
+  if (!@{$self->{devices}}) {
+    my $info = sprintf 'status of device is %s', $self->{'hpHttpMgHealth'};
+    if ($self->{'hpHttpMgHealth'} eq 'unknown') {
+      $self->add_message(UNKNOWN, $info);
+    } elsif ($self->{'hpHttpMgHealth'} eq 'ok') {
+      $self->add_message(OK, $info);
+    } elsif ($self->{'hpHttpMgHealth'} eq 'warning') {
+      $self->add_message(WARNING, $info);
+    } else {
+      $self->add_message(CRITICAL, $info);
+    }
+  }
 }
 

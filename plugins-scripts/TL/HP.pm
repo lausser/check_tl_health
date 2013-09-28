@@ -14,7 +14,7 @@ sub init {
   my $self = shift;
   my %params = @_;
   $self->SUPER::init(%params);
-  if ($self->{productname} =~ /Procurve/i) {
+  if ($self->{productname} =~ /StoreEver/i) {
     bless $self, 'TL::HP::StoreEver';
     $self->debug('using TL::HP::StoreEver');
   }

@@ -37,14 +37,15 @@ sub new {
     $self->check_snmp_and_model();
     if ($self->opts->servertype) {
       $self->{productname} = 'storeever' if $self->opts->servertype eq 'storeever';
-      $self->{productname} = 'huawei' if $self->opts->servertype eq 'huawei';
-      $self->{productname} = 'ifmib' if $self->opts->servertype eq 'ifmib';
     }
     if (! $TL::Device::plugin->check_messages()) {
       if ($self->opts->verbose && $self->opts->verbose) {
         printf "I am a %s\n", $self->{productname};
       }
       if ($self->{productname} =~ /1\/8 G2/i) {
+        bless $self, 'TL::HP';
+        $self->debug('using TL::HP');
+      } elsif ($self->{productname} =~ /storeever/i) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
       } elsif ($self->{productname} eq 'ifmib') {
@@ -981,11 +982,24 @@ sub make_symbolic {
                 $mo->{$symoid} = $TL::Device::mibs_and_oids->{$mib}->{$symoid.'Definition'}->{$result->{$oid}};
                 push(@entries, $mo);
               }
+            } elsif ($TL::Device::mibs_and_oids->{$mib}->{$symoid.'Definition'} =~ /^(.*?)::(.*)/) {
+              my $mib = $1;
+              my $definition = $2;
+              if  (exists $TL::Device::definitions->{$mib} && exists $TL::Device::definitions->{$mib}->{$definition}
+                  && exists $TL::Device::definitions->{$mib}->{$definition}->{$result->{$oid}}) {
+                $mo->{$symoid} = $TL::Device::definitions->{$mib}->{$definition}->{$result->{$oid}};
+              } else {
+                $mo->{$symoid} = 'unknown_'.$result->{$oid};
+              }
+            } else {
+              $mo->{$symoid} = 'unknown_'.$result->{$oid};
+              # oder $TL::Device::mibs_and_oids->{$mib}->{$symoid.'Definition'}?
             }
           }
         }
       }
     }
+    push(@entries, $mo);
   }
   return @entries;
 }
@@ -1760,8 +1774,6 @@ define service {
 EOEO
 }
 
-
-
 sub AUTOLOAD {
   my $self = shift;
   return if ($AUTOLOAD =~ /DESTROY/);    
@@ -1774,3 +1786,14 @@ sub AUTOLOAD {
   }
 }
 
+
+package NWC::Device;
+
+use strict;
+
+use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
+
+our @ISA = qw(TL::Device);
+
+$NWC::Device::statefilesdir = $TL::Device::statefilesdir;
+$NWC::Device::uptime = $TL::Device::uptime;
