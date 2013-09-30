@@ -1,10 +1,8 @@
 package TL::HP::StoreEver;
+our @ISA = qw(TL::HP);
 
 use strict;
-
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
-
-our @ISA = qw(TL::HP);
 
 sub init {
   my $self = shift;
@@ -52,4 +50,51 @@ sub check_environmental_subsystem {
     }
   }
 }
+
+package TL::HP::StoreEver::Device;
+our @ISA = qw(TL::HP::StoreEver);
+
+use strict;
+use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
+
+sub new {
+  my $class = shift;
+  my %params = @_;
+  my $self = {
+    blacklisted => 0,
+    info => undef,
+    extendedinfo => undef,
+  };
+  foreach my $param (qw(hpHttpMgDeviceIndex hpHttpMgDeviceHealth)) {
+    $self->{$param} = $params{$param};
+  }
+  bless $self, $class;
+  return $self;
+}
+
+sub check {
+  my $self = shift;
+  $self->blacklist('f', $self->{ciscoEnvMonFanStatusIndex});
+  $self->add_info(sprintf 'fan %d (%s) is %s',
+      $self->{ciscoEnvMonFanStatusIndex},
+      $self->{ciscoEnvMonFanStatusDescr},
+      $self->{ciscoEnvMonFanState});
+  if ($self->{ciscoEnvMonFanState} eq 'notPresent') {
+  } elsif ($self->{ciscoEnvMonFanState} ne 'normal') {
+    $self->add_message(CRITICAL, $self->{info});
+  }
+}
+
+sub dump {
+  my $self = shift;
+  printf "[FAN_%s]\n", $self->{ciscoEnvMonFanStatusIndex};
+  foreach (qw(ciscoEnvMonFanStatusIndex ciscoEnvMonFanStatusDescr
+      ciscoEnvMonFanState)) {
+    printf "%s: %s\n", $_, $self->{$_};
+  }
+  printf "info: %s\n", $self->{info};
+  printf "\n";
+}
+
+
 

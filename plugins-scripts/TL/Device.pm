@@ -45,12 +45,18 @@ sub new {
       if ($self->{productname} =~ /1\/8 G2/i) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
+      } elsif ($self->{productname} =~ /^hp /i) {
+        bless $self, 'TL::HP';
+        $self->debug('using TL::HP');
       } elsif ($self->{productname} =~ /storeever/i) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
       } elsif ($self->{productname} eq 'ifmib') {
         bless $self, 'TL::Generic';
         $self->debug('using TL::Generic');
+      } elsif ($self->get_snmp_object('MIB-II', 'sysObjectID', 0) eq '.1.3.6.1.4.1.11.10.2.1.3.25') {
+        bless $self, 'TL::HP';
+        $self->debug('using TL::HP');
       } else {
         $self->add_message(CRITICAL,
             sprintf('unknown device%s', $self->{productname} eq 'unknown' ?
