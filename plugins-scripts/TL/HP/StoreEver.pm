@@ -48,6 +48,22 @@ sub check_environmental_subsystem {
     } else {
       $self->add_message(CRITICAL, $info);
     }
+  } else {
+    foreach (@{$self->{devices}}) {
+      $_->check();
+    }
+  }
+  $self->dump()
+      if $self->opts->verbose >= 2;
+}
+
+sub dump {
+  my $self = shift;
+  if (!@{$self->{devices}}) {
+  } else {
+    foreach (@{$self->{devices}}) {
+      $_->dump();
+    }
   }
 }
 
@@ -65,8 +81,10 @@ sub new {
     info => undef,
     extendedinfo => undef,
   };
-  foreach my $param (qw(hpHttpMgDeviceIndex hpHttpMgDeviceHealth)) {
-    $self->{$param} = $params{$param};
+  foreach (qw(hpHttpMgDeviceIndex hpHttpMgDeviceHealth
+      hpHttpMgDeviceManufacturer hpHttpMgDeviceProductName
+      hpHttpMgDeviceSerialNumber)) {
+    $self->{$_} = $params{$_};
   }
   bless $self, $class;
   return $self;
@@ -74,22 +92,31 @@ sub new {
 
 sub check {
   my $self = shift;
-  $self->blacklist('f', $self->{ciscoEnvMonFanStatusIndex});
-  $self->add_info(sprintf 'fan %d (%s) is %s',
-      $self->{ciscoEnvMonFanStatusIndex},
-      $self->{ciscoEnvMonFanStatusDescr},
-      $self->{ciscoEnvMonFanState});
-  if ($self->{ciscoEnvMonFanState} eq 'notPresent') {
-  } elsif ($self->{ciscoEnvMonFanState} ne 'normal') {
+  $self->blacklist('d', $self->{hpHttpMgDeviceIndex});
+  $self->add_info(sprintf 'device %s (%s %s, sn:%s) status is %s',
+      $self->{hpHttpMgDeviceIndex},
+      $self->{hpHttpMgDeviceManufacturer},
+      $self->{hpHttpMgDeviceProductName},
+      $self->{hpHttpMgDeviceSerialNumber},
+      $self->{hpHttpMgDeviceHealth});
+  if ($self->{hpHttpMgDeviceHealth} eq 'warning') {
+    $self->add_message(WARNING, $self->{info});
+  } elsif ($self->{hpHttpMgDeviceHealth} eq 'unknown') {
+    $self->add_message(UNKNOWN, $self->{info});
+  } elsif ($self->{hpHttpMgDeviceHealth} eq 'unused') {
+  } elsif ($self->{hpHttpMgDeviceHealth} ne 'ok') {
     $self->add_message(CRITICAL, $self->{info});
+  } else {
+    $self->add_message(OK, $self->{info});
   }
 }
 
 sub dump {
   my $self = shift;
-  printf "[FAN_%s]\n", $self->{ciscoEnvMonFanStatusIndex};
-  foreach (qw(ciscoEnvMonFanStatusIndex ciscoEnvMonFanStatusDescr
-      ciscoEnvMonFanState)) {
+  printf "[DEVICE_%s]\n", $self->{hpHttpMgDeviceIndex};
+  foreach (qw(hpHttpMgDeviceIndex hpHttpMgDeviceHealth
+      hpHttpMgDeviceManufacturer hpHttpMgDeviceProductName
+      hpHttpMgDeviceSerialNumber)) {
     printf "%s: %s\n", $_, $self->{$_};
   }
   printf "info: %s\n", $self->{info};
