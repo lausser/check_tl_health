@@ -45,7 +45,7 @@ sub new {
       if ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
-      } elsif ($self->get_snmp_object('MIB-II', 'sysObjectID', 0) eq '.1.3.6.1.4.1.11.10.2.1.3.25') {
+      } elsif ($self->get_snmp_object('MIB-II', 'sysObjectID', 0) eq $TL::Device::mib_ids->{'SEMI-MIB'}) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
       } elsif ($self->{productname} eq 'ifmib') {

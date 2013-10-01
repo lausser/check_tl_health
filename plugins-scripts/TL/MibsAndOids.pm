@@ -1,3 +1,7 @@
+$TL::Device::mib_ids = {
+  'SEMI-MIB' => '1.3.6.1.4.1.11.10.2.1.3.25',
+};
+
 $TL::Device::mibs_and_oids = {
   'MIB-II' => {
       sysDescr => '1.3.6.1.2.1.1.1',
