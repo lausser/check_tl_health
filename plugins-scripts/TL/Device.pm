@@ -48,6 +48,9 @@ sub new {
       } elsif ($self->get_snmp_object('MIB-II', 'sysObjectID', 0) eq $TL::Device::mib_ids->{'SEMI-MIB'}) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
+      } elsif ($self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryVendor', 0)) {
+        bless $self, 'TL::Quantum';
+        $self->debug('using TL::Quantum');
       } elsif ($self->{productname} eq 'ifmib') {
         bless $self, 'TL::Generic';
         $self->debug('using TL::Generic');
@@ -601,6 +604,32 @@ sub get_thresholds {
   $self->{warning} = $thresholds[0];
   $self->{critical} = $thresholds[1];
   return @thresholds;
+}
+
+sub set_level {
+  my $self = shift;
+  my $code = shift;
+  $code = (qw(ok warning critical unknown))[$code] if $code =~ /^\d+$/;
+  $code = lc $code;
+  if (! exists $self->{tmp_level}) {
+    $self->{tmp_level} = {
+      ok => 0,
+      warning => 0,
+      critical => 0,
+      unknown => 0,
+    };
+  }
+  $self->{tmp_level}->{$code}++;
+}
+
+sub get_level {
+  my $self = shift;
+  return OK if ! exists $self->{tmp_level};
+  my $code = OK;
+  $code ||= CRITICAL if $self->{tmp_level}->{critical};
+  $code ||= WARNING  if $self->{tmp_level}->{warning};
+  $code ||= UNKNOWN  if $self->{tmp_level}->{unknown};
+  return $code;
 }
 
 sub has_failed {
@@ -1777,7 +1806,6 @@ EOEO
 sub AUTOLOAD {
   my $self = shift;
   return if ($AUTOLOAD =~ /DESTROY/);    
-printf STDERR "autoload %s\n", $AUTOLOAD;
   if ($AUTOLOAD =~ /^(.*)::check_(.*)_subsystem$/) {
     my $class = $1;
     my $subsystem = sprintf "%s_subsystem", $2;

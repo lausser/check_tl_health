@@ -13,6 +13,11 @@ libexec_SCRIPTS=check_tl_health
 MY_MODULES=
 EXTRA_MODULES=\
   Nagios/MiniPlugin.pm \
+  TL/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
+  TL/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
+  TL/Quantum/I40I80/Components/DriveSubsystem.pm \
+  TL/Quantum/I40I80.pm \
+  TL/Quantum.pm \
   TL/HP/StoreEver.pm \
   TL/HP.pm \
   TL/IFMIB/Component/LinkAggregation.pm \
