@@ -73,5 +73,5 @@ http://www.gnu.de/documents/gpl.de.html[GPL]
 
 Autor
 -----
-Gerhard Laußer (mailto:gerhard.lausser@consol.de[gerhard.lausser@consol.de]) beantwortet gerne Fragen zu diesem Plugin. Er ignoriert aber Fragen wie "Wann implementieren sie Library XY?", "Wann haben sie mal Zeit, meine Probleme zu lösen?", "Hatten sie schon Zeit, meine Probleme zu lösen?", "Wann gibt's die nächste Version?", "Blablablubb funktioniert nicht, können sie dieses Problem lösen?", "Hilfääää, mein Chef möchte, dass ich unseren Dong-Sing-Hao-Tapleloader von Ebay ins Icinga einbinde, kannst du das für mich machen?"
+Gerhard Laußer (mailto:gerhard.lausser@consol.de[gerhard.lausser@consol.de]) beantwortet gerne Fragen zu diesem Plugin. Er ignoriert aber Fragen wie "Wann implementieren sie Library XY?", "Wann haben sie mal Zeit, meine Probleme zu lösen?", "Hatten sie schon Zeit, meine Probleme zu lösen?", "Wann gibt's die nächste Version?", "Blablablubb funktioniert nicht, können sie dieses Problem lösen?", "Hilfääää, mein Chef möchte, dass ich unseren Dong-Sing-Hao-Tapeloader von Ebay ins Icinga einbinde, kannst du das für mich machen?"
 
