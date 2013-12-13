@@ -2,6 +2,9 @@
 # Changelog of the check_tl_health plugin #
 ############################################
 
+2013-10-07 1.1
+- added Quantum small tape library i40 and i 80
+
 2013-10-01 1.01
 - Minor cosmetics. Production monitoring of HP StoreEver MSL4048 starts
 

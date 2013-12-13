@@ -19,7 +19,7 @@ use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
   our $info = [];
   our $extendedinfo = [];
   our $summary = [];
-  our $statefilesdir = '/var/tmp/check_nwc_health';
+  our $statefilesdir = '/var/tmp/check_tl_health';
   our $oidtrace = [];
   our $uptime = 0;
 }
@@ -42,19 +42,34 @@ sub new {
       if ($self->opts->verbose && $self->opts->verbose) {
         printf "I am a %s\n", $self->{productname};
       }
-      if ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
+      if ($self->mode =~ /device::interfaces::/) {
+        bless $self, 'NWC::Generic';
+      } elsif ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
       } elsif ($self->get_snmp_object('MIB-II', 'sysObjectID', 0) eq $TL::Device::mib_ids->{'SEMI-MIB'}) {
         bless $self, 'TL::HP';
         $self->debug('using TL::HP');
+      } elsif ($self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryVendor', 0)) {
+        bless $self, 'TL::Quantum';
+        $self->debug('using TL::Quantum');
       } elsif ($self->{productname} eq 'ifmib') {
         bless $self, 'TL::Generic';
         $self->debug('using TL::Generic');
       } else {
-        $self->add_message(CRITICAL,
-            sprintf('unknown device%s', $self->{productname} eq 'unknown' ?
-                '' : '('.$self->{productname}.')'));
+        my $sysobj = $self->get_snmp_object('MIB-II', 'sysObjectID', 0);
+        if ($sysobj && exists $TL::Device::discover_ids->{$sysobj}) {
+          bless $self, $TL::Device::discover_ids->{$sysobj};
+          $self->debug('using '.$TL::Device::discover_ids->{$sysobj});
+        } elsif ($self->mode =~ /device::interfaces::/) { # it is snmp capable, so it should have interfaces
+          bless $self, 'NWC::Generic';
+        } elsif ($self->mode =~ /device::uptime/) {
+          bless $self, 'NWC::Generic';
+        } else {
+          $self->add_message(CRITICAL,
+              sprintf('unknown device%s', $self->{productname} eq 'unknown' ?
+                  '' : '('.$self->{productname}.')'));
+        }
       }
     }
   }
@@ -98,7 +113,7 @@ sub init {
       my $snmpwalkpid = 0;
       $SIG{'ALRM'} = sub {
         $timedout = 1;
-        printf "UNKNOWN - check_nwc_health timed out after %d seconds\n",
+        printf "UNKNOWN - check_tl_health timed out after %d seconds\n",
             $self->opts->timeout;
         kill 9, $snmpwalkpid;
       };
@@ -141,7 +156,8 @@ sub init {
     exit 0;
   } elsif ($self->mode =~ /device::uptime/) {
     $self->{uptime} /= 60;
-    my $info = sprintf 'device is up since %d minutes', $self->{uptime};
+    my $info = sprintf 'device is up since %s',
+        $self->human_timeticks($self->{uptime});
     $self->add_info($info);
     $self->set_thresholds(warning => '15:', critical => '5:');
     $self->add_message($self->check_thresholds($self->{uptime}), $info);
@@ -154,7 +170,7 @@ sub init {
     my ($code, $message) = $self->check_messages(join => ', ', join_all => ', ');
     $TL::Device::plugin->nagios_exit($code, $message);
   } elsif ($self->mode =~ /device::interfaces::aggregation::availability/) {
-    my $aggregation = TL::IFMIB::Component::LinkAggregation->new();
+    my $aggregation = NWC::IFMIB::Component::LinkAggregation->new();
     #$self->analyze_interface_subsystem();
     $aggregation->check();
   } elsif ($self->mode =~ /device::interfaces/) {
@@ -357,14 +373,14 @@ sub timeticks {
 sub human_timeticks {
   my $self = shift;
   my $timeticks = shift;
-  my $days = int($timeticks / 86400); 
-  $timeticks -= ($days * 86400); 
-  my $hours = int($timeticks / 3600); 
-  $timeticks -= ($hours * 3600); 
-  my $minutes = int($timeticks / 60); 
-  my $seconds = $timeticks % 60; 
-  $days = $days < 1 ? '' : $days .'d '; 
-  return $days . sprintf "%02d:%02d:%02d", $hours, $minutes, $seconds;
+  my $days = int($timeticks / 86400);
+  $timeticks -= ($days * 86400);
+  my $hours = int($timeticks / 3600);
+  $timeticks -= ($hours * 3600);
+  my $minutes = int($timeticks / 60);
+  my $seconds = $timeticks % 60;
+  $days = $days < 1 ? '' : $days .'d ';
+  return $days . sprintf "%2dh %2dm %2ds", $hours, $minutes, $seconds;
 }
 
 sub get_snmp_object {
@@ -448,7 +464,7 @@ sub valid_response {
 sub debug {
   my $self = shift;
   my $format = shift;
-  $self->{trace} = -f "/tmp/check_nwc_health.trace" ? 1 : 0;
+  $self->{trace} = -f "/tmp/check_tl_health.trace" ? 1 : 0;
   if ($self->opts->verbose && $self->opts->verbose > 10) {
     printf("%s: ", scalar localtime);
     printf($format, @_);
@@ -457,7 +473,7 @@ sub debug {
   if ($self->{trace}) {
     my $logfh = new IO::File;
     $logfh->autoflush(1);
-    if ($logfh->open("/tmp/check_nwc_health.trace", "a")) {
+    if ($logfh->open("/tmp/check_tl_health.trace", "a")) {
       $logfh->printf("%s: ", scalar localtime);
       $logfh->printf($format, @_);
       $logfh->printf("\n");
@@ -601,6 +617,32 @@ sub get_thresholds {
   $self->{warning} = $thresholds[0];
   $self->{critical} = $thresholds[1];
   return @thresholds;
+}
+
+sub set_level {
+  my $self = shift;
+  my $code = shift;
+  $code = (qw(ok warning critical unknown))[$code] if $code =~ /^\d+$/;
+  $code = lc $code;
+  if (! exists $self->{tmp_level}) {
+    $self->{tmp_level} = {
+      ok => 0,
+      warning => 0,
+      critical => 0,
+      unknown => 0,
+    };
+  }
+  $self->{tmp_level}->{$code}++;
+}
+
+sub get_level {
+  my $self = shift;
+  return OK if ! exists $self->{tmp_level};
+  my $code = OK;
+  $code ||= CRITICAL if $self->{tmp_level}->{critical};
+  $code ||= WARNING  if $self->{tmp_level}->{warning};
+  $code ||= UNKNOWN  if $self->{tmp_level}->{unknown};
+  return $code;
 }
 
 sub has_failed {
@@ -1732,7 +1774,7 @@ sub write_pidfile {
 sub analyze_interface_subsystem {
   my $self = shift;
   $self->{components}->{interface_subsystem} =
-      TL::IFMIB::Component::InterfaceSubsystem->new();
+      NWC::IFMIB::Component::InterfaceSubsystem->new();
 }
 
 sub shinken_interface_subsystem {
@@ -1753,21 +1795,21 @@ EOEO
 define service {
   host_name                     %s
   service_description           net_cpu
-  check_command                 check_nwc_health!cpu-load!80%%!90%%
+  check_command                 check_tl_health!cpu-load!80%%!90%%
 }
 EOEO
   printf <<'EOEO', $self->opts->hostname();
 define service {
   host_name                     %s
   service_description           net_mem
-  check_command                 check_nwc_health!memory-usage!80%%!90%%
+  check_command                 check_tl_health!memory-usage!80%%!90%%
 }
 EOEO
   printf <<'EOEO', $self->opts->hostname();
 define service {
   host_name                     %s
   service_description           net_ifusage_$KEY$
-  check_command                 check_nwc_health!interface-usage!$VALUE1$!$VALUE2$
+  check_command                 check_tl_health!interface-usage!$VALUE1$!$VALUE2$
   duplicate_foreach             _interfaces
   default_value                 80%%|90%%
 }
@@ -1777,7 +1819,6 @@ EOEO
 sub AUTOLOAD {
   my $self = shift;
   return if ($AUTOLOAD =~ /DESTROY/);    
-printf STDERR "autoload %s\n", $AUTOLOAD;
   if ($AUTOLOAD =~ /^(.*)::check_(.*)_subsystem$/) {
     my $class = $1;
     my $subsystem = sprintf "%s_subsystem", $2;
@@ -1798,3 +1839,13 @@ our @ISA = qw(TL::Device);
 
 $NWC::Device::statefilesdir = $TL::Device::statefilesdir;
 $NWC::Device::uptime = $TL::Device::uptime;
+
+
+package NWC::Generic;
+
+use strict;
+
+use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
+
+our @ISA = qw(NWC::Device);
+
