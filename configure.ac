@@ -101,7 +101,6 @@ AC_OUTPUT(
   Makefile 
   plugins-scripts/Makefile 
   plugins-scripts/subst 
-  doc/Makefile
 )
 
 ACX_FEATURE([with],[perl])
