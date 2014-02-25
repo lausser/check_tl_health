@@ -1,4 +1,4 @@
-package TL::HP;
+package Classes::HP;
 
 use strict;
 

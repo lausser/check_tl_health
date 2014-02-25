@@ -1,4 +1,4 @@
-package TL::Generic;
+package Classes::Generic;
 
 use strict;
 

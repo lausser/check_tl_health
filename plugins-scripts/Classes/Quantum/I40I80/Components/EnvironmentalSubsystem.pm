@@ -1,4 +1,4 @@
-package TL::Quantum::I40I80::Components::EnvironmentalSubsystem;
+package Classes::Quantum::I40I80::Components::EnvironmentalSubsystem;
 our @ISA = qw(TL::Quantum);
 
 use strict;

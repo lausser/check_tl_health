@@ -1,4 +1,4 @@
-package TL::Quantum::I40I80;
+package Classes::Quantum::I40I80;
 
 use strict;
 

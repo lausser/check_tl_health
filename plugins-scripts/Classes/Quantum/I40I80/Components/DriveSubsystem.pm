@@ -1,4 +1,4 @@
-package TL::Quantum::I40I80::Components::DriveSubsystem;
+package Classes::Quantum::I40I80::Components::DriveSubsystem;
 our @ISA = qw(TL::Quantum);
 
 use strict;
@@ -55,7 +55,7 @@ sub dump {
 }
 
 
-package TL::Quantum::I40I80::Components::PhysicalDrive;
+package Classes::Quantum::I40I80::Components::PhysicalDrive;
 our @ISA = qw(TL::Quantum::I40I80::Components::DriveSubsystem);
 
 use strict;

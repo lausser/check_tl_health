@@ -1,4 +1,4 @@
-package TL::Device;
+package Classes::Device;
 
 use strict;
 use IO::File;

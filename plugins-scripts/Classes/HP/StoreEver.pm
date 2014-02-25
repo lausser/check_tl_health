@@ -1,4 +1,4 @@
-package TL::HP::StoreEver;
+package Classes::HP::StoreEver;
 our @ISA = qw(TL::HP);
 
 use strict;
@@ -67,7 +67,7 @@ sub dump {
   }
 }
 
-package TL::HP::StoreEver::Device;
+package Classes::HP::StoreEver::Device;
 our @ISA = qw(TL::HP::StoreEver);
 
 use strict;

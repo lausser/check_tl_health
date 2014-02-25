@@ -1,4 +1,4 @@
-package TL::Quantum;
+package Classes::Quantum;
 
 use strict;
 
