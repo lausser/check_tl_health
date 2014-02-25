@@ -13,19 +13,15 @@ libexec_SCRIPTS=check_tl_health
 MY_MODULES=
 EXTRA_MODULES=\
   Nagios/MiniPlugin.pm \
-  TL/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
-  TL/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
-  TL/Quantum/I40I80/Components/DriveSubsystem.pm \
-  TL/Quantum/I40I80.pm \
-  TL/Quantum.pm \
-  TL/HP/StoreEver.pm \
-  TL/HP.pm \
-  TL/IFMIB/Component/LinkAggregation.pm \
-  TL/IFMIB/Component/InterfaceSubsystem.pm \
-  TL/IFMIB.pm \
-  TL/MibsAndOids.pm \
-  TL/Generic.pm \
-  TL/Device.pm
+  Classes/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
+  Classes/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
+  Classes/Quantum/I40I80/Components/DriveSubsystem.pm \
+  Classes/Quantum/I40I80.pm \
+  Classes/Quantum.pm \
+  Classes/HP/StoreEver.pm \
+  Classes/HP.pm \
+  Classes/MibsAndOids.pm \
+  Classes/Device.pm
 EXTRA_DIST=check_tl_health.pl $(EXTRA_MODULES)
 
 CLEANFILES=$(libexec_SCRIPTS)
