@@ -1,5 +1,5 @@
 package Classes::Quantum::I40I80::Components::EnvironmentalSubsystem;
-our @ISA = qw(TL::Quantum);
+our @ISA = qw(Classes::Quantum);
 
 use strict;
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };

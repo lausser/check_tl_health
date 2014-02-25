@@ -4,7 +4,7 @@ use strict;
 
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
 
-our @ISA = qw(TL::Device);
+our @ISA = qw(Classes::Device);
 
 use constant trees => (
     '1.3.6.1.4.1.3697', # QUANTUM-SMALL-TAPE-LIBRARY-MIB

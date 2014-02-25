@@ -1,5 +1,5 @@
 package Classes::Quantum::I40I80::Components::LogicalLibrarySubsystem;
-our @ISA = qw(TL::Quantum);
+our @ISA = qw(Classes::Quantum);
 
 use strict;
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
@@ -23,7 +23,7 @@ sub init {
   foreach ($self->get_snmp_table_objects(
       'QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'logicalLibraryTable')) {
     push(@{$self->{logical_libraries}},
-        TL::Quantum::I40I80::Components::LogicalLibrary->new(%{$_}));
+        Classes::Quantum::I40I80::Components::LogicalLibrary->new(%{$_}));
   }
 }
 
@@ -43,7 +43,7 @@ sub dump {
 }
 
 package Classes::Quantum::I40I80::Components::LogicalLibrary;
-our @ISA = qw(TL::Quantum::I40I80::Components::DriveSubsystem);
+our @ISA = qw(Classes::Quantum::I40I80::Components::DriveSubsystem);
 
 use strict;
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };

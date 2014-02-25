@@ -1,5 +1,5 @@
 package Classes::HP::StoreEver;
-our @ISA = qw(TL::HP);
+our @ISA = qw(Classes::HP);
 
 use strict;
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
@@ -31,7 +31,7 @@ sub analyze_environmental_subsystem {
   foreach ($self->get_snmp_table_objects(
       'SEMI-MIB', 'hpHttpMgDeviceTable')) {
     push(@{$self->{devices}},
-        TL::HP::StoreEver::Device->new(%{$_}));
+        Classes::HP::StoreEver::Device->new(%{$_}));
   }
 }
 
@@ -68,7 +68,7 @@ sub dump {
 }
 
 package Classes::HP::StoreEver::Device;
-our @ISA = qw(TL::HP::StoreEver);
+our @ISA = qw(Classes::HP::StoreEver);
 
 use strict;
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };

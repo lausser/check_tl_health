@@ -4,7 +4,7 @@ use strict;
 
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
 
-our @ISA = qw(TL::Quantum);
+our @ISA = qw(Classes::Quantum);
 
 sub init {
   my $self = shift;
@@ -30,16 +30,16 @@ sub init {
 
 sub analyze_drive_subsystem {
   my $self = shift;
-  $self->{components}->{drive_subsystem} = TL::Quantum::I40I80::Components::DriveSubsystem->new();
+  $self->{components}->{drive_subsystem} = Classes::Quantum::I40I80::Components::DriveSubsystem->new();
 }
 
 sub analyze_environmental_subsystem {
   my $self = shift;
-  $self->{components}->{environmental_subsystem} = TL::Quantum::I40I80::Components::EnvironmentalSubsystem->new();
+  $self->{components}->{environmental_subsystem} = Classes::Quantum::I40I80::Components::EnvironmentalSubsystem->new();
 }
 
 sub analyze_logical_subsystem {
   my $self = shift;
-  $self->{components}->{logical_subsystem} = TL::Quantum::I40I80::Components::LogicalLibrarySubsystem->new();
+  $self->{components}->{logical_subsystem} = Classes::Quantum::I40I80::Components::LogicalLibrarySubsystem->new();
 }
 
