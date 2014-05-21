@@ -1,34 +1,19 @@
 package Classes::Quantum::I40I80::Components::EnvironmentalSubsystem;
-our @ISA = qw(Classes::Quantum);
-
+our @ISA = qw(GLPlugin::Item);
 use strict;
 use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
 
-sub new {
-  my $class = shift;
-  my %params = @_;
-  my $self = {
-    blacklisted => 0,
-    info => undef,
-    extendedinfo => undef,
-  };
-  bless $self, $class;
-  $self->init(%params);
-  return $self;
-}
-
 sub init {
   my $self = shift;
-  foreach (qw(powerStatus coolingStatus controlStatus connectivityStatus
+  $self->get_snmp_objects('QUANTUM-SMALL-TAPE-LIBRARY-MIB', (qw(powerStatus
+      coolingStatus controlStatus connectivityStatus
       roboticsStatus mediaStatus driveStatus operatorActionRequest
       aggregatedMainDoorStatus aggregatedIEDoorStatus
       libraryControl numStorageSlots numCleanSlots numIESlots
       numLogicalLibraries
       librarySNMPAgentDescription libraryName libraryVendor
       librarySerialNumber libraryDescription libraryModel
-      libraryGlobalStatus libraryURL)) {
-    $self->{$_} = $self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', $_, 0);
-  }
+      libraryGlobalStatus libraryURL)));
 }
 
 sub check {
@@ -79,22 +64,5 @@ sub check {
   if ($self->get_level()) {
     $self->add_message($self->get_level(), $info);
   }
-}
-
-
-sub dump {
-  my $self = shift;
-  printf "[LIBRARY_%s]\n", $self->{libraryName};
-  foreach (qw(powerStatus coolingStatus controlStatus connectivityStatus
-      roboticsStatus mediaStatus driveStatus operatorActionRequest
-      aggregatedMainDoorStatus aggregatedIEDoorStatus
-      libraryControl numStorageSlots numCleanSlots numIESlots
-      numLogicalLibraries
-      librarySNMPAgentDescription libraryName libraryVendor
-      librarySerialNumber libraryDescription libraryModel
-      libraryGlobalStatus libraryURL)) {
-    printf "%s: %s\n", $_, $self->{$_};
-  }
-  printf "\n";
 }
 

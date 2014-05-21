@@ -1,30 +1,12 @@
 package Classes::Quantum::I40I80::Components::LogicalLibrarySubsystem;
-our @ISA = qw(Classes::Quantum);
-
+our @ISA = qw(GLPlugin::Item);
 use strict;
-use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
-
-sub new {
-  my $class = shift;
-  my %params = @_;
-  my $self = {
-    logical_libraries => [],
-    blacklisted => 0,
-    info => undef,
-    extendedinfo => undef,
-  };
-  bless $self, $class;
-  $self->init(%params);
-  return $self;
-}
 
 sub init {
   my $self = shift;
-  foreach ($self->get_snmp_table_objects(
-      'QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'logicalLibraryTable')) {
-    push(@{$self->{logical_libraries}},
-        Classes::Quantum::I40I80::Components::LogicalLibrary->new(%{$_}));
-  }
+  $self->get_snmp_tables('QUANTUM-SMALL-TAPE-LIBRARY-MIB', [
+      ['logical_libraries', 'logicalLibraryTable', 'Classes::Quantum::I40I80::Components::LogicalLibrary'],
+  ]);
 }
 
 sub check {
@@ -35,78 +17,31 @@ sub check {
   }
 }
 
-sub dump {
-  my $self = shift;
-  foreach (@{$self->{logical_libraries}}) {
-    $_->dump();
-  }
-}
 
 package Classes::Quantum::I40I80::Components::LogicalLibrary;
-our @ISA = qw(Classes::Quantum::I40I80::Components::DriveSubsystem);
-
+our @ISA = qw(GLPlugin::TableItem);
 use strict;
-use constant { OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3 };
-
-sub new {
-  my $class = shift;
-  my %params = @_;
-  my $self = {
-    blacklisted => 0,
-    info => undef,
-    extendedinfo => undef,
-  };
-  foreach (qw(logicalLibraryIndex logicalLibraryAutoClean
-      logicalLibraryNumSlots logicalLibraryNumIE logicalLibraryNumTapeDrives
-      logicalLibraryStorageElemAddr logicalLibraryIEElemAddr
-      logicalLibraryTapeDriveElemAddr logicalLibraryChangerDeviceAddr
-      logicalLibraryName logicalLibrarySerialNumber logicalLibraryModel
-      logicalLibraryInterface logicalLibraryMediaDomain logicalLibraryOnlineState
-      logicalLibraryReadyState indices)) {
-    $self->{$_} = $params{$_};
-  }
-  $self->{logicalLibraryIndex} ||= $self->{indices}->[0];
-  bless $self, $class;
-  return $self;
-}
 
 sub check {
   my $self = shift;
+  $self->{logicalLibraryIndex} ||= $self->{flat_indices};
   $self->blacklist('ld', $self->{logicalLibraryIndex});
   my $info = sprintf 'logical lib %d states: online=%s readyness=%s',
       $self->{logicalLibraryIndex}, $self->{logicalLibraryOnlineState},
       $self->{logicalLibraryReadyState};
   $self->add_info($info);
   if ($self->{logicalLibraryOnlineState} =~ /pending/i) {
-    $self->set_level(WARNING);
+    $self->set_level_warning();
   } elsif ($self->{logicalLibraryOnlineState} eq 'offline') {
-    $self->set_level(CRITICAL);
+    $self->set_level_critical();
   }
   if ($self->{logicalLibraryReadyState} eq 'becomingReady') {
-    $self->set_level(WARNING);
+    $self->set_level_warning();
   } elsif ($self->{logicalLibraryReadyState} eq 'notReady') {
-    $self->set_level(CRITICAL);
+    $self->set_level_critical();
   }
   if ($self->get_level()) {
     $self->add_message($self->get_level(), $info);
   }
-
 }
-
-sub dump {
-  my $self = shift;
-  printf "[LOG_LIB_%s]\n", $self->{logicalLibraryIndex};
-  foreach (qw(logicalLibraryIndex logicalLibraryAutoClean
-      logicalLibraryNumSlots logicalLibraryNumIE logicalLibraryNumTapeDrives
-      logicalLibraryStorageElemAddr logicalLibraryIEElemAddr
-      logicalLibraryTapeDriveElemAddr logicalLibraryChangerDeviceAddr
-      logicalLibraryName logicalLibrarySerialNumber logicalLibraryModel
-      logicalLibraryInterface logicalLibraryMediaDomain logicalLibraryOnlineState
-      logicalLibraryReadyState)) {
-    printf "%s: %s\n", $_, $self->{$_};
-  }
-  printf "info: %s\n", $self->{info};
-  printf "\n";
-}
-
 

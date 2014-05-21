@@ -13,12 +13,14 @@ libexec_SCRIPTS=check_tl_health
 MY_MODULES=
 EXTRA_MODULES=\
   Nagios/MiniPlugin.pm \
+  GLPlugin.pm \
   Classes/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
   Classes/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
   Classes/Quantum/I40I80/Components/DriveSubsystem.pm \
   Classes/Quantum/I40I80.pm \
   Classes/Quantum.pm \
-  Classes/HP/StoreEver.pm \
+  Classes/HP/SEMIMIB/Components/EnvironmentalSubsystem.pm \
+  Classes/HP/SEMIMIB.pm \
   Classes/HP.pm \
   Classes/MibsAndOids.pm \
   Classes/Device.pm

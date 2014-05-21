@@ -9,8 +9,10 @@ use constant trees => (
 sub init {
   my $self = shift;
   if ($self->{productname} =~ /StoreEver/i) {
-    bless $self, 'Classes::HP::StoreEver';
-    $self->debug('using Classes::HP::StoreEver');
+    bless $self, 'Classes::HP::SEMIMIB';
+    $self->debug('using Classes::HP::SEMIMIB');
+  } else {
+    $self->no_such_model();
   }
   if (ref($self) ne "Classes::HP") {
     $self->init();

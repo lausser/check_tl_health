@@ -45,14 +45,14 @@ sub new {
         printf "I am a %s\n", $self->{productname};
       }
       if ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
-        bless $self, 'TL::HP';
-        $self->debug('using TL::HP');
-      } elsif ($self->get_snmp_object('MIB-II', 'sysObjectID', 0) eq $TL::Device::mib_ids->{'SEMI-MIB'}) {
-        bless $self, 'TL::HP';
-        $self->debug('using TL::HP');
+        bless $self, 'Classes::HP';
+        $self->debug('using Classes::HP');
+      } elsif ($self->implements_mib('SEMI-MIB')) {
+        bless $self, 'Classes::HP::SEMIMIB';
+        $self->debug('using Classes::HP::SEMIMIB');
       } elsif ($self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryVendor', 0)) {
-        bless $self, 'TL::Quantum';
-        $self->debug('using TL::Quantum');
+        bless $self, 'Classes::Quantum';
+        $self->debug('using Classes::Quantum');
       } else {
         if (my $class = $self->discover_suitable_class()) {
           bless $self, $class;

@@ -9,11 +9,13 @@ use constant trees => (
 sub init {
   my $self = shift;
   if ($self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryModel', 0) && $self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryModel', 0) =~ /Scalar\s+i\d+/i) {
-    bless $self, 'TL::Quantum::I40I80';
-    $self->debug('using TL::Quantum::I40I80');
+    bless $self, 'Classes::Quantum::I40I80';
+    $self->debug('using Classes::Quantum::I40I80');
   }
   if (ref($self) ne "Classes::Quantum") {
     $self->init();
+  } else {
+printf "dong\n";
   }
 }
 
