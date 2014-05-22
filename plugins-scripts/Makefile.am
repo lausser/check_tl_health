@@ -12,8 +12,8 @@ VPATH=$(top_srcdir) $(top_srcdir)/plugins-scripts $(top_srcdir)/plugins-scripts/
 libexec_SCRIPTS=check_tl_health
 MY_MODULES=
 EXTRA_MODULES=\
-  Nagios/MiniPlugin.pm \
   GLPlugin.pm \
+  GLPluginSNMP.pm \
   Classes/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
   Classes/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
   Classes/Quantum/I40I80/Components/DriveSubsystem.pm \

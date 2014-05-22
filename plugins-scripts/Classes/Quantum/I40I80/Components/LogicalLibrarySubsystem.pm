@@ -1,5 +1,5 @@
 package Classes::Quantum::I40I80::Components::LogicalLibrarySubsystem;
-our @ISA = qw(GLPlugin::Item);
+our @ISA = qw(GLPlugin::SNMP::Item);
 use strict;
 
 sub init {
@@ -19,7 +19,7 @@ sub check {
 
 
 package Classes::Quantum::I40I80::Components::LogicalLibrary;
-our @ISA = qw(GLPlugin::TableItem);
+our @ISA = qw(GLPlugin::SNMP::TableItem);
 use strict;
 
 sub check {

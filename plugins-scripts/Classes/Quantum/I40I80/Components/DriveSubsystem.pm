@@ -1,5 +1,5 @@
 package Classes::Quantum::I40I80::Components::DriveSubsystem;
-our @ISA = qw(GLPlugin::Item);
+our @ISA = qw(GLPlugin::SNMP::Item);
 use strict;
 
 sub init {
@@ -30,7 +30,7 @@ sub check {
 
 
 package Classes::Quantum::I40I80::Components::PhysicalDrive;
-our @ISA = qw(GLPlugin::TableItem);
+our @ISA = qw(GLPlugin::SNMP::TableItem);
 use strict;
 
 sub check {
