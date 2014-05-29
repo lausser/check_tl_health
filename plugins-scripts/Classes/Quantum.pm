@@ -14,8 +14,6 @@ sub init {
   }
   if (ref($self) ne "Classes::Quantum") {
     $self->init();
-  } else {
-printf "dong\n";
   }
 }
 

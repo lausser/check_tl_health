@@ -22,6 +22,10 @@ EXTRA_MODULES=\
   Classes/HP/SEMIMIB/Components/EnvironmentalSubsystem.pm \
   Classes/HP/SEMIMIB.pm \
   Classes/HP.pm \
+  Classes/Spectralogic/TSeries/T950/Components/EnvironmentalSubsystem.pm \
+  Classes/Spectralogic/TSeries/T950.pm \
+  Classes/Spectralogic/TSeries.pm \
+  Classes/Spectralogic.pm \
   Classes/MibsAndOids.pm \
   Classes/Device.pm
 EXTRA_DIST=check_tl_health.pl $(EXTRA_MODULES)

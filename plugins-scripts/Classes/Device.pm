@@ -24,6 +24,9 @@ sub classify {
       } elsif ($self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryVendor', 0)) {
         bless $self, 'Classes::Quantum';
         $self->debug('using Classes::Quantum');
+      } elsif ($self->implements_mib('SPECTRALOGIC-GLOBAL-REG-SLHARDWARE-SLLIBRARIES-SLTSERIES')) {
+        bless $self, 'Classes::Spectralogic::TSeries';
+        $self->debug('using Classes::Spectralogic::TSeries');
       } else {
         if (my $class = $self->discover_suitable_class()) {
           bless $self, $class;
