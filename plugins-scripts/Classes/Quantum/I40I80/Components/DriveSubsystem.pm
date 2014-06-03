@@ -14,13 +14,13 @@ sub init {
 sub check {
   my $self = shift;
   $self->add_info('checking physical drives');
-  my $info = sprintf 'overall drive status online=%s readyness=%s',
-      $self->{overallPhDriveOnlineStatus}, $self->{overallPhDriveReadinessStatus};
-  $self->add_info($info);
+  $self->add_info(sprintf 'overall drive status online=%s readyness=%s',
+      $self->{overallPhDriveOnlineStatus},
+      $self->{overallPhDriveReadinessStatus});
   if ($self->{overallPhDriveOnlineStatus} =~ /pending/i) {
-    $self->add_warning($info);
+    $self->add_warning();
   } elsif ($self->{overallPhDriveOnlineStatus} eq 'offline') {
-    $self->add_critical($info);
+    $self->add_critical();
   }
   foreach (@{$self->{phycsical_drives}}) {
     $_->check();
@@ -36,11 +36,9 @@ use strict;
 sub check {
   my $self = shift;
   $self->{phDriveIndex} ||= $self->{flat_indices};
-  $self->blacklist('pd', $self->{phDriveIndex});
-  my $info = sprintf 'drive %d states: online=%s readyness=%s ras=%s cleaning=%s',
+  $self->add_info(sprintf 'drive %d states: online=%s readyness=%s ras=%s cleaning=%s',
       $self->{phDriveIndex}, $self->{phDriveOnlineState},
-      $self->{phDriveReadinessState}, $self->{phDriveRasStatus}, $self->{phDriveCleaningStatus};
-  $self->add_info($info);
+      $self->{phDriveReadinessState}, $self->{phDriveRasStatus}, $self->{phDriveCleaningStatus});
   if ($self->{phDriveOnlineState} =~ /pending/i) {
     $self->set_level_warning();
   } elsif ($self->{phDriveOnlineState} eq 'offline') {
@@ -63,7 +61,7 @@ sub check {
     $self->set_level_critical();
   }
   if ($self->get_level()) {
-    $self->add_message($self->get_level(), $info);
+    $self->add_message($self->get_level());
   }
 }
 

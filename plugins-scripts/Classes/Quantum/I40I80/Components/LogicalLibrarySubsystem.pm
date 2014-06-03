@@ -25,11 +25,9 @@ use strict;
 sub check {
   my $self = shift;
   $self->{logicalLibraryIndex} ||= $self->{flat_indices};
-  $self->blacklist('ld', $self->{logicalLibraryIndex});
-  my $info = sprintf 'logical lib %d states: online=%s readyness=%s',
+  $self->add_info(sprintf 'logical lib %d states: online=%s readyness=%s',
       $self->{logicalLibraryIndex}, $self->{logicalLibraryOnlineState},
-      $self->{logicalLibraryReadyState};
-  $self->add_info($info);
+      $self->{logicalLibraryReadyState});
   if ($self->{logicalLibraryOnlineState} =~ /pending/i) {
     $self->set_level_warning();
   } elsif ($self->{logicalLibraryOnlineState} eq 'offline') {
@@ -41,7 +39,7 @@ sub check {
     $self->set_level_critical();
   }
   if ($self->get_level()) {
-    $self->add_message($self->get_level(), $info);
+    $self->add_message($self->get_level());
   }
 }
 

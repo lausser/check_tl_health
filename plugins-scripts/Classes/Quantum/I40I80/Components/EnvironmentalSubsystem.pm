@@ -19,7 +19,6 @@ sub init {
 sub check {
   my $self = shift;
   $self->add_info('checking overall system');
-  $self->blacklist('tl', '');
   my $states = {
     OK => [],
     WARNING => [],
@@ -59,10 +58,9 @@ sub check {
     $self->set_level(WARNING);
     push(@{$states->{WARNING}}, ['aggregatedIEDoorStatus', $self->{aggregatedIEDoorStatus}]);
   }
-  my $info = sprintf 'overall states: %s', join(' ', map { $_->[0].'='.$_->[1] } map { my $x = $_->[0]; $x =~ s/Status//; [$x, $_->[1]] } (@{$states->{CRITICAL}}, @{$states->{WARNING}}, @{$states->{UNKNOWN}}, @{$states->{OK}}));
-  $self->add_info($info);
+  $self->add_info(sprintf 'overall states: %s', join(' ', map { $_->[0].'='.$_->[1] } map { my $x = $_->[0]; $x =~ s/Status//; [$x, $_->[1]] } (@{$states->{CRITICAL}}, @{$states->{WARNING}}, @{$states->{UNKNOWN}}, @{$states->{OK}})));
   if ($self->get_level()) {
-    $self->add_message($self->get_level(), $info);
+    $self->add_message($self->get_level());
   }
 }
 
