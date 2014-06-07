@@ -48,6 +48,7 @@ AM_INSTALL_PROGRAM_FLAGS=@INSTALL_OPTS@
 
 $(libexec_SCRIPTS) : $(EXTRA_DIST)
 	$(ECHO) "#! #PERL# -w" | $(AWK) -f ./subst > $@
+	$(ECHO) "# nagios: +epn" >> $@
 	$(ECHO) >> $@
 	for m in ${EXTRA_MODULES}; do \
 		$(SED) -e 's/^1;//g' < $$m | $(AWK) -f ./subst | $(GREP) -v "use Nagios::Plugin" >> $@; \

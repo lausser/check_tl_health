@@ -163,6 +163,12 @@ sub init {
 
 sub check_snmp_and_model {
   my $self = shift;
+  $GLPlugin::SNMP::mibs_and_oids->{'MIB-II'} = {
+    sysDescr => '1.3.6.1.2.1.1.1',
+    sysObjectID => '1.3.6.1.2.1.1.2',
+    sysUpTime => '1.3.6.1.2.1.1.3',
+    sysName => '1.3.6.1.2.1.1.5',
+  };
   if ($self->opts->snmpwalk) {
     my $response = {};
     if (! -f $self->opts->snmpwalk) {
@@ -386,7 +392,7 @@ sub timeticks {
   if ($timestr =~ /\((\d+)\)/) {
     # Timeticks: (20718727) 2 days, 9:33:07.27
     $timestr = $1 / 100;
-  } elsif ($timestr =~ /(\d+)\s*days.*?(\d+):(\d+):(\d+)\.(\d+)/) {
+  } elsif ($timestr =~ /(\d+)\s*day[s]*.*?(\d+):(\d+):(\d+)\.(\d+)/) {
     # Timeticks: 2 days, 9:33:07.27
     $timestr = $1 * 24 * 3600 + $2 * 3600 + $3 * 60 + $4;
   } elsif ($timestr =~ /(\d+):(\d+):(\d+)\.(\d+)/) {
