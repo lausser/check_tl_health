@@ -47,6 +47,9 @@ sub check {
   if ($self->{aggregatedMainDoorStatus} eq 'open') {
     $self->set_level(CRITICAL);
     push(@{$states->{CRITICAL}}, ['aggregatedMainDoorStatus', $self->{aggregatedMainDoorStatus}]);
+  } elsif ($self->{aggregatedMainDoorStatus} eq 'closedAndUnLocked') {
+    $self->set_level(WARNING);
+    push(@{$states->{WARNING}}, ['aggregatedMainDoorStatus', $self->{aggregatedMainDoorStatus}]);
   } elsif ($self->{aggregatedMainDoorStatus} eq 'unknown') {
     $self->set_level(UNKNOWN);
     push(@{$states->{UNKNOWN}}, ['aggregatedMainDoorStatus', $self->{aggregatedMainDoorStatus}]);
@@ -54,9 +57,6 @@ sub check {
   if ($self->{aggregatedIEDoorStatus} eq 'open') {
     $self->set_level(CRITICAL);
     push(@{$states->{CRITICAL}}, ['aggregatedIEDoorStatus', $self->{aggregatedIEDoorStatus}]);
-  } elsif ($self->{aggregatedIEDoorStatus} eq 'closedAndUnLocked') {
-    $self->set_level(WARNING);
-    push(@{$states->{WARNING}}, ['aggregatedIEDoorStatus', $self->{aggregatedIEDoorStatus}]);
   }
   $self->add_info(sprintf 'overall states: %s', join(' ', map { $_->[0].'='.$_->[1] } map { my $x = $_->[0]; $x =~ s/Status//; [$x, $_->[1]] } (@{$states->{CRITICAL}}, @{$states->{WARNING}}, @{$states->{UNKNOWN}}, @{$states->{OK}})));
   if ($self->get_level()) {
