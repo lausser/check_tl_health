@@ -160,6 +160,17 @@ sub init {
     );
     my ($code, $message) = $self->check_messages(join => ', ', join_all => ', ');
     $GLPlugin::plugin->nagios_exit($code, $message);
+  } elsif ($self->mode =~ /device::supportedmibs/) {
+    if (grep /mibdepot/, keys %GLPlugin::SNMP::) {
+      foreach my $mibinfo (@{$GLPlugin::SNMP::mibdepot}) {
+        if (! exists $GLPlugin::SNMP::mib_ids->{$mibinfo->[3]}) {
+          $GLPlugin::SNMP::mib_ids->{$mibinfo->[3]} = $mibinfo->[0];
+        }
+        if ($self->implements_mib($mibinfo->[3])) {
+          printf "%s\n", $mibinfo->[3];
+        }
+      }
+    }
   }
 }
 
@@ -246,6 +257,7 @@ sub check_snmp_and_model {
         keys %$response;
     $self->set_rawdata($response);
   } else {
+    $self->set_timeout_alarm();
     if (eval "require Net::SNMP") {
       my %params = ();
       my $net_snmp_version = Net::SNMP->VERSION(); # 5.002000 or 6.000000
@@ -397,6 +409,9 @@ sub timeticks {
   } elsif ($timestr =~ /(\d+)\s*day[s]*.*?(\d+):(\d+):(\d+)\.(\d+)/) {
     # Timeticks: 2 days, 9:33:07.27
     $timestr = $1 * 24 * 3600 + $2 * 3600 + $3 * 60 + $4;
+  } elsif ($timestr =~ /(\d+):(\d+):(\d+):(\d+)\.(\d+)/) {
+    # Timeticks: 0001:03:18:42.77
+    $timestr = $1 * 3600 * 24 + $2 * 3600 + $3 * 60 + $4;
   } elsif ($timestr =~ /(\d+):(\d+):(\d+)\.(\d+)/) {
     # Timeticks: 9:33:07.27
     $timestr = $1 * 3600 + $2 * 60 + $3;
@@ -1485,4 +1500,35 @@ sub ensure_index {
   my $key = shift;
   $self->{$key} ||= $self->{flat_indices};
 }
+
+sub unhex_ip {
+  my $self = shift;
+  my $value = shift;
+  if ($value && $value =~ /^0x(\w{8})/) {
+    $value = join(".", unpack "C*", pack "H*", $1);
+  } elsif ($value && $value =~ /^0x(\w{2} \w{2} \w{2} \w{2})/) {
+    $value = $1;
+    $value =~ s/ //g;
+    $value = join(".", unpack "C*", pack "H*", $value);
+  } elsif ($value && unpack("H8", $value) =~ /(\w{2})(\w{2})(\w{2})(\w{2})/) {
+    $value = join(".", map { hex($_) } ($1, $2, $3, $4));
+  }
+  return $value;
+}
+
+sub unhex_mac {
+  my $self = shift;
+  my $value = shift;
+  if ($value && $value =~ /^0x(\w{12})/) {
+    $value = join(".", unpack "C*", pack "H*", $1);
+  } elsif ($value && $value =~ /^0x(\w{2}\s*\w{2}\s*\w{2}\s*\w{2}\s*\w{2}\s*\w{2})/) {
+    $value = $1;
+    $value =~ s/ //g;
+    $value = join(":", unpack "C*", pack "H*", $value);
+  } elsif ($value && unpack("H12", $value) =~ /(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})/) {
+    $value = join(":", map { hex($_) } ($1, $2, $3, $4, $5, $6));
+  }
+  return $value;
+}
+
 
