@@ -362,3 +362,7 @@ $GLPlugin::SNMP::definitions = {
   },
 };
 
+$GLPlugin::SNMP::mibdepot = [
+  ['1.3.6.1.4.1.3697', 'quantum', 'v2', 'QUANTUM-SMALL-TAPE-LIBRARY-MIB'],
+];
+

@@ -2,6 +2,12 @@
 # Changelog of the check_tl_health plugin #
 ############################################
 
+2014-08-01 1.2.0.5
+- GLPluginSNMP update
+
+2014-07-28 1.2.0.4
+- GLPlugin update
+
 2014-07-03 1.2.0.3
 - update GLPlugin
 
