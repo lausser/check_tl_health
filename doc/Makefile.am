@@ -1,10 +1,10 @@
 PLUGIN=check_tl_health
 
-all: dedoc endoc
+docs: dedoc
 	$(RM) $(PLUGIN).html
 	cat $(PLUGIN).de.html >> $(PLUGIN).html
 	sed -ri '/col width/d' $(PLUGIN).html
-	unix2dos $(PLUGIN).html
+	sed -ri 's/$$/\r/' $(PLUGIN).html
 
 dedoc:
 	asciidoc --unsafe --no-header-footer -a max-width=800 $(PLUGIN).de.txt
