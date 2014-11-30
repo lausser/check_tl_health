@@ -29,6 +29,9 @@ sub classify {
       } elsif ($self->implements_mib('SPECTRALOGIC-GLOBAL-REG-SLHARDWARE-SLLIBRARIES-SLTSERIES')) {
         bless $self, 'Classes::Spectralogic::TSeries';
         $self->debug('using Classes::Spectralogic::TSeries');
+      } elsif ($self->implements_mib('ADIC-INTELLIGENT-STORAGE-MIB')) {
+        bless $self, 'Classes::Adic';
+        $self->debug('using Adic');
       } else {
         if (my $class = $self->discover_suitable_class()) {
           bless $self, $class;

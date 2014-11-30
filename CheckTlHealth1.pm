@@ -55,8 +55,8 @@ sub init {
       productLibraryClass productSerialNumber
       agentGlobalStatus agentLastGlobalStatus agentTimeStamp 
   )));
-  $self->analyze_and_check_environmental_subsystem('Classes::Adic::Components::ComponentSubsystem');
-# componentStatus: ok
+  #$self->analyze_and_check_environmental_subsystem('Classes::Adic::Components::ComponentSubsystem');
+  $self->analyze_and_check_environmental_subsystem('Classes::Adic::Components::RasSubsystem');
 }
 
 sub dump {
@@ -71,45 +71,57 @@ sub dump {
   }
 }
 
-package Classes::Adic::Components::ComponentSubsystem;
+package Classes::Adic::Components::RasSubsystem;
 our @ISA = qw(GLPlugin::SNMP::Item);
 use strict;
 
 sub init {
   my $self = shift;
   use Data::Dumper;
-  $self->get_snmp_tables('ADIC-INTELLIGENT-STORAGE-MIB', [
-    ['components', 'componentTable', 'GLPlugin::TableItem'],
-    ['powersupplies', 'powerSupplyTable', 'GLPlugin::TableItem'],
-    ['voltages', 'voltageSensorTable', 'GLPlugin::TableItem'],
-    ['temperatures', 'temperatureSensorTable', 'GLPlugin::TableItem'],
-    ['fans', 'coolingFanTable', 'GLPlugin::TableItem'],
-
-    ['fans', 'coolingFanTable', 'GLPlugin::TableItem'],
+  $self->get_snmp_tables('ADIC-MANAGEMENT-MIB', [
+    ['rassystems', 'rasSystemStatusTable', 'Classes::Adic::Components::RasSubsystem::RasSystem'],
   ]);
-my @tables = ();
-# logicalLibraryTable
-# persistentDataTable
-# phDriveTable phDriveWriteErrors, phDriveReadErrors, phDriveRasStatus, phDriveOnlineStatus, phDrivePowerStatus
-# phGeneralInfoTable onlineStatus readiness totalFreeCapacity totalRawCapacity totalUsedCapacity physLibraryDoorStatus
-# rasFruStatTable
-# rasReportTable
-# rasSystemStatusTable
-
-foreach (qw(logicalLibraryTable persistentDataTable phDriveTable phGeneralInfoTable rasFruStatTable rasReportTable rasSystemStatusTable)) {
-
-#foreach  (qw(trapPayloadTable globalStatusTable rasSystemStatusTable rasTicketTable rasReportTable rasFruStatTable rasTicketFilterTable globalEthernetTable systemManagerTable softwareInstallationTable persistentDataTable userTable licenseKeyTable licenseFeatureTable licensableFeatureTable registrationTable logTable logSnapshotTable phGeneralInfoTable phIeSlotTable phDriveTable phDriveStatHistoryTable fcDrivePortTable phMediaTable phTransportTable phTransportDomainTable phCleaningMediaTable mediaDomainTable mediaTypeTable phFrameTable phSegmentTable phStorageSegTable phIeSegTable phIeStationTable phDriveSegTable phCleaningSegTable phStorageSlotTable loGeneralInfoTable autoPartitionTable vendorIdTable productIdTable logicalLibraryTable loSegmentTable loSegmentBelongsToTable loStorageSegTable loIeSegTable loDriveSegTable loStorageSlotTable loIeSlotTable loDriveTable loStatisticsTable)) {
-eval sprintf "package Classes::Adic::Components::ComponentSubsystem::%s;\nour \@ISA = qw(GLPlugin::SNMP::TableItem);\n", $_;
- push(@tables, [$_, $_, 'Classes::Adic::Components::ComponentSubsystem::'.$_]);
 }
-  $self->get_snmp_tables('ADIC-MANAGEMENT-MIB', \@tables);
-}
+
+package Classes::Adic::Components::RasSubsystem::RasSystem;
+our @ISA = qw(GLPlugin::SNMP::TableItem);
+use strict;
 
 sub check {
   my $self = shift;
-  foreach (@{$self->{components}}) {
-    $_->check();
+  $self->add_info('checking ras subsystems');
+  $self->add_info(sprintf '%s has status %s',
+      $self->{rasStatusGroupIndex}, $self->{rasStatusGroupStatus});
+  if ($self->{rasStatusGroupStatus} ne 'good' ||
+      $self->{rasStatusGroupStatus} ne 'informational') {
+    if ($self->{rasStatusGroupStatus} eq 'failed') {
+      $self->add_critical();
+    } elsif ($self->{rasStatusGroupStatus} eq 'degraded') {
+      $self->add_warning();
+    } elsif ($self->{rasStatusGroupStatus} eq 'warning') {
+      $self->add_warning();
+    } elsif ($self->{rasStatusGroupStatus} eq 'unknown') {
+      $self->add_unknown();
+    } elsif ($self->{rasStatusGroupStatus} eq 'invalid') {
+      $self->add_unknown();
+    } # else ok oder unused
   }
+}
+
+
+package Classes::Adic::Components::ComponentSubsystem;
+our @ISA = qw(GLPlugin::SNMP::Item);
+use strict;
+
+sub init {
+  my $self = shift;
+  $self->get_snmp_tables('ADIC-INTELLIGENT-STORAGE-MIB', [
+    ['components', 'componentTable', 'Classes::Adic::Components::ComponentSubsystem::Component'],
+    #['powersupplies', 'powerSupplyTable', 'GLPlugin::TableItem'],
+    #['voltages', 'voltageSensorTable', 'GLPlugin::TableItem'],
+    #['temperatures', 'temperatureSensorTable', 'GLPlugin::TableItem'],
+    #['fans', 'coolingFanTable', 'GLPlugin::TableItem'],
+  ]);
 }
 
 

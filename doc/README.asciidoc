@@ -26,6 +26,7 @@ Modi
 |HP		|StorEver MSL4048	|X|.	|.	|X
 |Quantum	|i40	|X|.	|.	|X
 |Quantum	|i80	|X|.	|.	|X
+|Quantum	|i6000	|X|X	|X	|X
 |Spectralogic	|T950	|X|.	|.	|X
 |==========================================
 Die Liste ist ungenau. Manche Laufwerke, die hier nicht aufgeführt sind, werden evt. anhand der implementierten MIBs erkannt. Einfach ausprobieren....

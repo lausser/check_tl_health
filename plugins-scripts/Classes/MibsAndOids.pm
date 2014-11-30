@@ -4,7 +4,8 @@ $GLPlugin::SNMP::mib_ids = {
   'SEMI-MIB' => '1.3.6.1.4.1.11.10.2.1.3.25',
   'QUANTUM-SMALL-TAPE-LIBRARY-MIB' => '1.3.6.1.4.1.3697',
   'SPECTRALOGIC-GLOBAL-REG-SLHARDWARE-SLLIBRARIES-SLTSERIES' => '1.3.6.1.4.1.3478.1.1.3',
-  'SL-HW-LIB-T950-MIB' => '1.3.6.1.4.1.3478.1.1.3.1.1'
+  'SL-HW-LIB-T950-MIB' => '1.3.6.1.4.1.3478.1.1.3.1.1',
+  'ADIC-INTELLIGENT-STORAGE-MIB' => '1.3.6.1.4.1.3764.1.1',
 };
 
 $GLPlugin::SNMP::mibs_and_oids = {
@@ -348,7 +349,20 @@ $GLPlugin::SNMP::mibs_and_oids = {
     componentVendor => '1.3.6.1.4.1.3764.1.1.30.10.1.6',
     componentSn => '1.3.6.1.4.1.3764.1.1.30.10.1.7',
     componentStatus => '1.3.6.1.4.1.3764.1.1.30.10.1.8',
+    componentStatusDefinition => {
+      1 => 'unknown',
+      2 => 'unused',
+      3 => 'ok',
+      4 => 'warning',
+      5 => 'unknown',
+    },
     componentControl => '1.3.6.1.4.1.3764.1.1.30.10.1.9',
+    componentControlDefinition => {
+      1 => 'resetColdStart',
+      2 => 'resetWarmStart',
+      3 => 'offline',
+      4 => 'online',
+    },
     componentREDId => '1.3.6.1.4.1.3764.1.1.30.10.1.10',
     componentFirmwareVersion => '1.3.6.1.4.1.3764.1.1.30.10.1.11',
     componentGeoAddrAisle => '1.3.6.1.4.1.3764.1.1.30.10.1.12',
@@ -466,7 +480,20 @@ $GLPlugin::SNMP::mibs_and_oids = {
     componentVendor => '1.3.6.1.4.1.3764.1.1.30.10.1.6',
     componentSn => '1.3.6.1.4.1.3764.1.1.30.10.1.7',
     componentStatus => '1.3.6.1.4.1.3764.1.1.30.10.1.8',
+    componentStatusDefinition => {
+      1 => 'unknown',
+      2 => 'unused',
+      3 => 'ok',
+      4 => 'warning',
+      5 => 'unknown',
+    },
     componentControl => '1.3.6.1.4.1.3764.1.1.30.10.1.9',
+    componentControlDefinition => {
+      1 => 'resetColdStart',
+      2 => 'resetWarmStart',
+      3 => 'offline',
+      4 => 'online',
+    },
     componentREDId => '1.3.6.1.4.1.3764.1.1.30.10.1.10',
     componentFirmwareVersion => '1.3.6.1.4.1.3764.1.1.30.10.1.11',
     componentGeoAddrAisle => '1.3.6.1.4.1.3764.1.1.30.10.1.12',
@@ -2183,6 +2210,23 @@ $GLPlugin::SNMP::definitions = {
       5 => 'createAndWait',
       6 => 'destroy',
     },
+    'AdicDateAndTime' => sub {
+      my $value = shift;
+      use Time::Local;
+      if ($value && ($value =~ /^0x((\w{2} ){8,})/ || $value =~ /^((\w{2} ){8,})/)) {
+        $value = $1;
+        $value =~ s/ //g;
+printf "//%s//\n", $value;
+        my $year = hex substr($value, 0, 4);
+        $value = substr($value, 4);
+        my ($month, $day, $hour, $minute, $second,
+            $dseconds, $dirutc, $hoursutc, $minutesutc) = unpack "C*", pack "H*", $value;
+        return timegm($second, $minute, $hour, $day, $month-1, $year-1900);
+      } elsif ($value && unpack("H8", $value) =~ /(\w{2})(\w{2})(\w{2})(\w{2})/) {
+        $value = join(".", map { hex($_) } ($1, $2, $3, $4));
+      }
+      return $value;
+    },
   },
   'ADIC-MANAGEMENT-MIB' => {
   },
@@ -2349,4 +2393,17 @@ $GLPlugin::SNMP::mibdepot = [
   ['1.3.6.1.4.1.3764.1.1.200.20', 'adic', 'v2', 'ADIC-MANAGEMENT-MIB'],
   ['1.3.6.1.4.1.3764.1.1', 'adic', 'v2', 'ADIC-INTELLIGENT-STORAGE-MIB'],
 ];
+
+__END__
+        AdicDateAndTime ::= OCTET STRING ( SIZE( 8 | 11) )
+        -- Octet  1 and 2 - Year ( 0 ... 65536 ) in network byte order
+        -- Octet  3 - Month ( 1 ... 12 )
+        -- Octet  4 - Day ( 1 ... 31 )
+        -- Octet  5 - Hour (0 ... 23 )
+        -- Octet  6 - Minute ( 0 ... 59 )
+        -- Octet  7 - Seconds ( 0 ... 60 ) [ Use 60 for leap second ]
+        -- Octet  8 - Deci-seconds ( 0 ... 9 )
+        -- Octet  9 - Direction from UTC ( '+' or '-' )
+        -- Octet 10 - Hours from UTC ( 0 ... 11 )
+        -- Octet 11 - Minutes from UTC ( 0 ... 59 )
 

@@ -14,6 +14,7 @@ MY_MODULES=
 EXTRA_MODULES=\
   GLPlugin.pm \
   GLPluginSNMP.pm \
+  Classes/MibsAndOids.pm \
   Classes/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
   Classes/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
   Classes/Quantum/I40I80/Components/DriveSubsystem.pm \
@@ -29,7 +30,10 @@ EXTRA_MODULES=\
   Classes/UCDMIB/Components/MemSubsystem.pm \
   Classes/UCDMIB/Components/CpuSubsystem.pm \
   Classes/UCDMIB.pm \
-  Classes/MibsAndOids.pm \
+  Classes/Adic/Components/ComponentSubsystem.pm \
+  Classes/Adic/Components/EnvironmentalSubsystem.pm \
+  Classes/Adic/Components/RasSubsystem.pm \
+  Classes/Adic.pm \
   Classes/Device.pm
 EXTRA_DIST=check_tl_health.pl $(EXTRA_MODULES)
 
@@ -54,7 +58,7 @@ $(libexec_SCRIPTS) : $(EXTRA_DIST)
 	$(ECHO) "# nagios: +epn" >> $@
 	$(ECHO) >> $@
 	for m in ${EXTRA_MODULES}; do \
-		$(SED) -e 's/^1;//g' < $$m | $(AWK) -f ./subst | $(GREP) -v "use Nagios::Plugin" >> $@; \
+		$(SED) -e 's/^1;//g' < $$m | $(AWK) -f ./subst | $(GREP) -v "use Nagios::Plugin" | $(SED) -n '/__END__/q;p' >> $@; \
 	done
 	$(ECHO) "package main;" >> $@
 	$(CAT) check_tl_health.pl | $(AWK) -f ./subst >> $@
