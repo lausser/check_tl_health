@@ -27,6 +27,11 @@ sub init {
 
 sub check {
   my $self = shift;
+  eval "require Date::Manip";
+  if ($@) {
+    $self->add_critical('Date::Manip is not installed');
+    return;
+  }
   if ($self->{slT950GeneralStatusPowerStatus} eq 'failure') {
     $self->add_critical('power supply failure');
   }
@@ -54,7 +59,6 @@ sub check {
 package Classes::Spectralogic::TSeries::T950::Components::EnvironmentalSubsystem::Message;
 our @ISA = qw(GLPlugin::SNMP::TableItem);
 use strict;
-use Date::Manip;
 
 sub check {
   my $self = shift;
