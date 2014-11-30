@@ -26,6 +26,9 @@ EXTRA_MODULES=\
   Classes/Spectralogic/TSeries/T950.pm \
   Classes/Spectralogic/TSeries.pm \
   Classes/Spectralogic.pm \
+  Classes/UCDMIB/Components/MemSubsystem.pm \
+  Classes/UCDMIB/Components/CpuSubsystem.pm \
+  Classes/UCDMIB.pm \
   Classes/MibsAndOids.pm \
   Classes/Device.pm
 EXTRA_DIST=check_tl_health.pl $(EXTRA_MODULES)

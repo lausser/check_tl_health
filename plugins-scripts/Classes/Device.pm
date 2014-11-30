@@ -15,7 +15,9 @@ sub classify {
       if ($self->opts->verbose && $self->opts->verbose) {
         printf "I am a %s\n", $self->{productname};
       }
-      if ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
+      if ($self->opts->mode =~ /^my-/) {
+        $self->load_my_extension();
+      } elsif ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
         bless $self, 'Classes::HP';
         $self->debug('using Classes::HP');
       } elsif ($self->implements_mib('SEMI-MIB')) {
@@ -48,7 +50,7 @@ use strict;
 
 sub init {
   my $self = shift;
-  if ($self->mode =~ /something generic/) {
+  if ($self->mode =~ /something specific/) {
   } else {
     bless $self, 'GLPlugin::SNMP';
     $self->no_such_mode();
