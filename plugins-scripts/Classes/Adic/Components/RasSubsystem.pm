@@ -31,7 +31,7 @@ sub check {
   $self->{rasStatusGroupTextSummary} =~ s/[\|'"]+/_/g;
   if ($self->{rasStatusGroupStatus} eq 'good' ||
       $self->{rasStatusGroupStatus} eq 'informational') {
-    $self->add_info(sprintf '%s has status %s%s',
+    $self->add_info(sprintf '%s has status %s',
         $self->{rasStatusGroupIndex}, $self->{rasStatusGroupStatus});
   } else {
     $self->add_info(sprintf '%s has status %s%s%s',

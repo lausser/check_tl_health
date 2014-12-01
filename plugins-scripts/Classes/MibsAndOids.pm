@@ -2216,14 +2216,17 @@ $GLPlugin::SNMP::definitions = {
       if ($value && ($value =~ /^0x((\w{2} ){8,})/ || $value =~ /^((\w{2} ){8,})/)) {
         $value = $1;
         $value =~ s/ //g;
-printf "//%s//\n", $value;
         my $year = hex substr($value, 0, 4);
         $value = substr($value, 4);
         my ($month, $day, $hour, $minute, $second,
             $dseconds, $dirutc, $hoursutc, $minutesutc) = unpack "C*", pack "H*", $value;
         return timegm($second, $minute, $hour, $day, $month-1, $year-1900);
-      } elsif ($value && unpack("H8", $value) =~ /(\w{2})(\w{2})(\w{2})(\w{2})/) {
-        $value = join(".", map { hex($_) } ($1, $2, $3, $4));
+      } elsif ($value && unpack("H22", $value) =~ /(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})/) {
+        my $year = hex $1.$2;
+        my ($month, $day, $hour, $minute, $second,
+            $dseconds, $dirutc, $hoursutc, $minutesutc) = 
+            map { hex($_) } ($3, $4, $5, $6, $7, $8, $9, $10, $11);
+        return timegm($second, $minute, $hour, $day, $month-1, $year-1900);
       }
       return $value;
     },
@@ -2384,6 +2387,26 @@ printf "//%s//\n", $value;
       5 => 'informational',
       6 => 'unknown',
       7 => 'invalid',
+    },
+    'AdicDateAndTime' => sub {
+      my $value = shift;
+      use Time::Local;
+      if ($value && ($value =~ /^0x((\w{2} ){8,})/ || $value =~ /^((\w{2} ){8,})/)) {
+        $value = $1;
+        $value =~ s/ //g;
+        my $year = hex substr($value, 0, 4);
+        $value = substr($value, 4);
+        my ($month, $day, $hour, $minute, $second,
+            $dseconds, $dirutc, $hoursutc, $minutesutc) = unpack "C*", pack "H*", $value;
+        return timegm($second, $minute, $hour, $day, $month-1, $year-1900);
+      } elsif ($value && unpack("H22", $value) =~ /(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})(\w{2})/) {
+        my $year = hex $1.$2;
+        my ($month, $day, $hour, $minute, $second,
+            $dseconds, $dirutc, $hoursutc, $minutesutc) = 
+            map { hex($_) } ($3, $4, $5, $6, $7, $8, $9, $10, $11);
+        return timegm($second, $minute, $hour, $day, $month-1, $year-1900);
+      }
+      return $value;
     },
   },
 };
