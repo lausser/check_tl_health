@@ -34,6 +34,9 @@ EXTRA_MODULES=\
   Classes/Adic/Components/EnvironmentalSubsystem.pm \
   Classes/Adic/Components/RasSubsystem.pm \
   Classes/Adic.pm \
+  Classes/BDT/FlexStorII/Components/EnvironmentalSubsystem.pm \
+  Classes/BDT/FlexStorII.pm \
+  Classes/BDT.pm \
   Classes/Device.pm
 EXTRA_DIST=check_tl_health.pl $(EXTRA_MODULES)
 

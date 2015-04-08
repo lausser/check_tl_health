@@ -32,6 +32,9 @@ sub classify {
       } elsif ($self->implements_mib('ADIC-INTELLIGENT-STORAGE-MIB')) {
         bless $self, 'Classes::Adic';
         $self->debug('using Adic');
+      } elsif ($self->implements_mib('BDT-MIB')) {
+        bless $self, 'Classes::BDT';
+        $self->debug('using BDT');
       } else {
         if (my $class = $self->discover_suitable_class()) {
           bless $self, $class;

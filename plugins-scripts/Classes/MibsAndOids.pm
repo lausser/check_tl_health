@@ -6,6 +6,7 @@ $GLPlugin::SNMP::mib_ids = {
   'SPECTRALOGIC-GLOBAL-REG-SLHARDWARE-SLLIBRARIES-SLTSERIES' => '1.3.6.1.4.1.3478.1.1.3',
   'SL-HW-LIB-T950-MIB' => '1.3.6.1.4.1.3478.1.1.3.1.1',
   'ADIC-INTELLIGENT-STORAGE-MIB' => '1.3.6.1.4.1.3764.1.1',
+  'BDT-MIB' => '1.3.6.1.4.1.20884.10893.2.101.1', # bDTAgentInfo
 };
 
 $GLPlugin::SNMP::mibs_and_oids = {
@@ -1928,6 +1929,34 @@ $GLPlugin::SNMP::mibs_and_oids = {
         ssCpuRawSystem => '1.3.6.1.4.1.2021.11.52',
         ssCpuRawIdle => '1.3.6.1.4.1.2021.11.53',
   },
+  'BDT-MIB' => {
+    bdt => '1.3.6.1.4.1.20884',
+    storage => '1.3.6.1.4.1.20884.10893',
+    hardware => '1.3.6.1.4.1.20884.10893.2',
+    bDTagent => '1.3.6.1.4.1.20884.10893.2.101',
+    bDTAgentInfo => '1.3.6.1.4.1.20884.10893.2.101.1',
+    bDTDisplayName => '1.3.6.1.4.1.20884.10893.2.101.1.1',
+    bDTDescription => '1.3.6.1.4.1.20884.10893.2.101.1.2',
+    bDTAgentVendor => '1.3.6.1.4.1.20884.10893.2.101.1.3',
+    bDTAgentVersion => '1.3.6.1.4.1.20884.10893.2.101.1.4',
+    bDTGlobalData => '1.3.6.1.4.1.20884.10893.2.101.2',
+    bDTGlobalStatus => '1.3.6.1.4.1.20884.10893.2.101.2.1',
+    bDTGlobalStatusDefinition => 'BDTMIB::bDTGlobalStatus',
+    bDTLastGlobalStatus => '1.3.6.1.4.1.20884.10893.2.101.2.2',
+    bDTLastGlobalStatusDefinition => 'BDTMIB::bDTLastGlobalStatus',
+    bDTTimeStamp => '1.3.6.1.4.1.20884.10893.2.101.2.3',
+    bDTGetTimeOut => '1.3.6.1.4.1.20884.10893.2.101.2.4',
+    bDTErrorCode => '1.3.6.1.4.1.20884.10893.2.101.2.5',
+    bDTRefreshRate => '1.3.6.1.4.1.20884.10893.2.101.2.6',
+    bDTErrorData => '1.3.6.1.4.1.20884.10893.2.101.2.9',
+    bDTDeviceInfo => '1.3.6.1.4.1.20884.10893.2.101.4',
+    bDTDevSerialNumber => '1.3.6.1.4.1.20884.10893.2.101.4.1',
+    bDTDevVendorID => '1.3.6.1.4.1.20884.10893.2.101.4.2',
+    bDTDevProductID => '1.3.6.1.4.1.20884.10893.2.101.4.3',
+    bDTDevFirmwareRev => '1.3.6.1.4.1.20884.10893.2.101.4.4',
+    bDTDevRobFirmwareRev => '1.3.6.1.4.1.20884.10893.2.101.4.5',
+    bDTDevBootcodeRev => '1.3.6.1.4.1.20884.10893.2.101.4.6',
+  },
 };
 
 $GLPlugin::SNMP::definitions = {
@@ -2409,12 +2438,31 @@ $GLPlugin::SNMP::definitions = {
       return $value;
     },
   },
+  'BDTMIB' => {
+    bDTGlobalStatus => {
+      '1' => 'other',
+      '2' => 'unknown',
+      '3' => 'ok',
+      '4' => 'non-critical',
+      '5' => 'critical',
+      '6' => 'non-Recoverable',
+    },
+    bDTLastGlobalStatus => {
+      '1' => 'other',
+      '2' => 'unknown',
+      '3' => 'ok',
+      '4' => 'non-critical',
+      '5' => 'critical',
+      '6' => 'non-recoverable',
+    },
+  },
 };
 
 $GLPlugin::SNMP::mibdepot = [
   ['1.3.6.1.4.1.3697', 'quantum', 'v2', 'QUANTUM-SMALL-TAPE-LIBRARY-MIB'],
   ['1.3.6.1.4.1.3764.1.1.200.20', 'adic', 'v2', 'ADIC-MANAGEMENT-MIB'],
   ['1.3.6.1.4.1.3764.1.1', 'adic', 'v2', 'ADIC-INTELLIGENT-STORAGE-MIB'],
+  ['1.3.6.1.4.1.20884', 'btd', 'v2', 'BDTMIB-MIB'],
 ];
 
 __END__

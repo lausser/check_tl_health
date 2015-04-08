@@ -28,6 +28,12 @@ $plugin->add_mode(
     alias => undef,
     help => 'Check the status of environmental equipment (fans, temperatures, power, selftests)',
 );
+$plugin->add_mode(
+    internal => 'device::supportedmibs',
+    spec => 'supportedmibs',
+    alias => undef,
+    help => 'Shows the names of the mibs which this devices has implemented (only lausser may run this command)',
+);
 $plugin->add_arg(
     spec => 'blacklist|b=s',
     help => '--blacklist
