@@ -341,7 +341,7 @@ sub dump {
         $have_flat_indices = 0 if (! exists $obj->{flat_indices});
       }
       if ($have_flat_indices) {
-        foreach my $obj (sort { 
+        foreach my $obj (sort {
             join('', map { sprintf("%30d",$_) } split( /\./, $a->{flat_indices})) cmp
             join('', map { sprintf("%30d",$_) } split( /\./, $b->{flat_indices}))
         } @{$self->{$_}}) {
