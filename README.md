@@ -30,7 +30,8 @@ Modi
 | BDT     | FlexStorII       | X               |          |              | X      |
 
 
-Die Liste ist ungenau. Manche Laufwerke, die hier nicht aufgeführt sind, werden evt. anhand der implementierten MIBs erkannt. Einfach ausprobieren…. (Wenn ein Gerät nicht erkannt wird, kann ich das Plugin erweitern. Hier gilt allerdings: betteln hilft nicht, bezahlen dagegen sehr).
+The list is not complete. Some drives that are not listed here can possibly be monitored because they implement the same MIBs as supported models. Just try it ....
+(If a device is not recognized, i can extend the plugin. But not for free)
 
 Installation
 ============
