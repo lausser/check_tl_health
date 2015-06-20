@@ -60,11 +60,11 @@ Examples
     
     # a Quantum T950
     
-    $ check_tl_health --hostname 10.18.12.130 \
+    $ check_tl_health --hostname 10.18.11.10 \
         --community secret \
         --mode hardware-health
     OK - hardware working fine
-    $ check_tl_health --hostname 10.18.12.130 \
+    $ check_tl_health --hostname 10.18.11.10 \
         --community secret \
         --mode hardware-health --verbose
     I am a Linux MUC-TLIB-A 3.10.26 #1 SMP Wed May 21 15:50:38 MDT 2014 ppc
@@ -79,11 +79,11 @@ Examples
     
     # a Quantum i80
     
-    $ check_tl_health --hostname 10.18.12.130 \
+    $ check_tl_health --hostname 10.18.1.28 \
         --community secret \
         --mode hardware-health
     CRITICAL - operator action requested, overall states: media=degraded aggregatedIEDoor=closedAndUnLocked power=good cooling=good control=good connectivity=good robotics=good drive=good
-    $ check_tl_health --hostname 10.18.12.130 \
+    $ check_tl_health --hostname 10.18.1.28 \
         --community secret \
         --mode hardware-health --verbose
     I am a Linux hr-lib01 2.6.27.46 #1 PREEMPT Fri Apr 22 14:37:45 MDT 2011 ppc
