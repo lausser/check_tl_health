@@ -1,0 +1,9 @@
+name: check_tl_health
+description: "file:///README.md"
+url: "https://github.com/lausser/check_tl_health"
+tags: 
+vendor: HP
+target: Backup
+type: Plugin
+license: gplv2
+
