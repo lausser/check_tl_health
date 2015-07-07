@@ -1,21 +1,21 @@
 package Classes::Adic::Components::ComponentSubsystem;
-our @ISA = qw(GLPlugin::SNMP::Item);
+our @ISA = qw(Monitoring::GLPlugin::SNMP::Item);
 use strict;
 
 sub init {
   my $self = shift;
   $self->get_snmp_tables('ADIC-INTELLIGENT-STORAGE-MIB', [
     ['components', 'componentTable', 'Classes::Adic::Components::ComponentSubsystem::Component'],
-    #['powersupplies', 'powerSupplyTable', 'GLPlugin::TableItem'],
-    #['voltages', 'voltageSensorTable', 'GLPlugin::TableItem'],
-    #['temperatures', 'temperatureSensorTable', 'GLPlugin::TableItem'],
-    #['fans', 'coolingFanTable', 'GLPlugin::TableItem'],
+    #['powersupplies', 'powerSupplyTable', 'Monitoring::GLPlugin::TableItem'],
+    #['voltages', 'voltageSensorTable', 'Monitoring::GLPlugin::TableItem'],
+    #['temperatures', 'temperatureSensorTable', 'Monitoring::GLPlugin::TableItem'],
+    #['fans', 'coolingFanTable', 'Monitoring::GLPlugin::TableItem'],
   ]);
 }
 
 
 package Classes::Adic::Components::ComponentSubsystem::Component;
-our @ISA = qw(GLPlugin::SNMP::TableItem);
+our @ISA = qw(Monitoring::GLPlugin::SNMP::TableItem);
 use strict;
 
 sub check {

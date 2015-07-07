@@ -9,23 +9,23 @@ sub init {
   $self->get_snmp_objects('ADIC-INTELLIGENT-STORAGE-MIB', (qw(productMibVersion)));
   # steckt in intell-stor-mib, meint aber version von mgmgt-mib
   if (grep { $self->{productMibVersion} eq $_ } qw(1.18 1.19 1.20 1.21 1.22 1.23)) {
-    $GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
-        $GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB::1.33'};
-    $GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB'} =
-        $GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB::1.93'};
-    $GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
-        $GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB::1.33'};
-    $GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB'} =
-        $GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB::1.93'};
+    $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
+        $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB::1.33'};
+    $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB'} =
+        $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB::1.93'};
+    $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
+        $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB::1.33'};
+    $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB'} =
+        $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB::1.93'};
   } else {
-    $GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
-        $GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB::1.23'};
-    $GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB'} =
-        $GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB::1.45'};
-    $GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
-        $GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB::1.23'};
-    $GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB'} =
-        $GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB::1.45'};
+    $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
+        $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB::1.23'};
+    $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB'} =
+        $Monitoring::GLPlugin::SNMP::mibs_and_oids->{'ADIC-MANAGEMENT-MIB::1.45'};
+    $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
+        $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-INTELLIGENT-STORAGE-MIB::1.23'};
+    $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB'} =
+        $Monitoring::GLPlugin::SNMP::definitions->{'ADIC-MANAGEMENT-MIB::1.45'};
   }
   if ($self->mode =~ /device::hardware::health/) {
     $self->analyze_and_check_environmental_subsystem('Classes::Adic::Components::EnvironmentalSubsystem');

@@ -4,17 +4,22 @@ SED=/bin/sed
 GREP=/bin/grep
 CAT=/bin/cat
 ECHO=/bin/echo
+if DISABLE_STANDALONE
+STANDALONE = no
+else
+STANDALONE = yes
+endif
 
 SUFFIXES = .pl .pm .sh
 
 VPATH=$(top_srcdir) $(top_srcdir)/plugins-scripts $(top_srcdir)/plugins-scripts/t
 
 libexec_SCRIPTS=check_tl_health
-MY_MODULES=
+GL_MODULES=\
+  ../lib/Monitoring/GLPlugin.pm \
+  ../lib/Monitoring/GLPlugin/SNMP.pm \
+  ../lib/Monitoring/GLPlugin/UPNP.pm
 EXTRA_MODULES=\
-  GLPlugin.pm \
-  GLPluginSNMP.pm \
-  Classes/MibsAndOids.pm \
   Classes/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
   Classes/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
   Classes/Quantum/I40I80/Components/DriveSubsystem.pm \
@@ -37,6 +42,7 @@ EXTRA_MODULES=\
   Classes/BDT/FlexStorII/Components/EnvironmentalSubsystem.pm \
   Classes/BDT/FlexStorII.pm \
   Classes/BDT.pm \
+  Classes/MibsAndOids.pm \
   Classes/Device.pm
 EXTRA_DIST=check_tl_health.pl $(EXTRA_MODULES)
 
@@ -58,13 +64,18 @@ AM_INSTALL_PROGRAM_FLAGS=@INSTALL_OPTS@
 
 $(libexec_SCRIPTS) : $(EXTRA_DIST)
 	$(ECHO) "#! #PERL# -w" | $(AWK) -f ./subst > $@
-	$(ECHO) "# nagios: +epn" >> $@
+	$(ECHO) "# nagios: -epn" >> $@
 	$(ECHO) >> $@
+	if [ "${STANDALONE}" == "yes" ]; then \
+		$(ECHO) i am standalone; \
+		for m in ${GL_MODULES}; do \
+			$(SED) -e 's/^1;//g' < $$m | $(SED) -e '/^__END__/,$$d' | $(AWK) -f ./subst >> $@; \
+		done \
+	fi
 	for m in ${EXTRA_MODULES}; do \
-		$(SED) -e 's/^1;//g' < $$m | $(AWK) -f ./subst | $(GREP) -v "use Nagios::Plugin" | $(SED) -n '/__END__/q;p' >> $@; \
+		$(SED) -e 's/^1;//g' < $$m | $(SED) -e '/^__END__/,$$d' | $(AWK) -f ./subst | $(GREP) -v "use Nagios::Plugin" >> $@; \
 	done
 	$(ECHO) "package main;" >> $@
-	$(CAT) check_tl_health.pl | $(AWK) -f ./subst >> $@
+	$(CAT) $(libexec_SCRIPTS).pl | $(AWK) -f ./subst >> $@
 	chmod +x $@
-#| $(GREP) -v "use Nagios" >> $@;
 
