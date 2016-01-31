@@ -15,9 +15,9 @@ sub init {
     ['messages', 'slT950MessageTable', 'Classes::Spectralogic::TSeries::T950::Components::EnvironmentalSubsystem::Message' ],
   ]);
   if (grep { ! exists $_->{slT950MessageTime}} @{$self->{messages}}) {
-    $Monitoring::GLPlugin::SNMP::session->max_msg_size(1024*63);
+    $self->mult_max_msg_size(63);
     $self->{messages} = [];
-    delete $Monitoring::GLPlugin::SNMP::tablecache->{'SL-HW-LIB-T950-MIB'}->{'slT950MessageTable'};
+    $self->clear_table_cache('SL-HW-LIB-T950-MIB', 'slT950MessageTable');
     # sonst fehlen slT950MessageRemedyText und slT950MessageTime
     $self->get_snmp_tables('SL-HW-LIB-T950-MIB', [
       ['messages', 'slT950MessageTable', 'Classes::Spectralogic::TSeries::T950::Components::EnvironmentalSubsystem::Message' ],

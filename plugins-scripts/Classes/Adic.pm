@@ -9,6 +9,7 @@ sub init {
   $self->get_snmp_objects('ADIC-INTELLIGENT-STORAGE-MIB', (qw(productMibVersion)));
   # steckt in intell-stor-mib, meint aber version von mgmgt-mib
   $self->require_mib('ADIC-INTELLIGENT-STORAGE-MIB');
+  $self->require_mib('ADIC-MANAGEMENT-MIB');
   if (grep { $self->{productMibVersion} eq $_ } qw(1.18 1.19 1.20 1.21 1.22 1.23)) {
     $Monitoring::GLPlugin::SNMP::MibsAndOids::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB'} =
         $Monitoring::GLPlugin::SNMP::MibsAndOids::mibs_and_oids->{'ADIC-INTELLIGENT-STORAGE-MIB::1.33'};
