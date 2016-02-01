@@ -97,6 +97,13 @@ AC_ARG_WITH(perl,
   with_perl=$withval,with_perl=$PERL)
 AC_SUBST(PERL, $with_perl)
 
+AC_ARG_ENABLE([standalone],
+    AS_HELP_STRING([--disable-standalone], [Disable feature standalone]))
+AS_IF([test "x$enable_standalone" != "xno"], [
+  dnl Do the stuff needed for enabling the feature
+])
+AM_CONDITIONAL([DISABLE_STANDALONE], [test "$enable_standalone" = "no"])
+
 AC_OUTPUT(Makefile plugins-scripts/Makefile plugins-scripts/subst doc/Makefile)
 
 ACX_FEATURE([with],[perl])
@@ -107,3 +114,4 @@ ACX_FEATURE([with],[degrees])
 ACX_FEATURE([enable],[perfdata])
 ACX_FEATURE([enable],[extendedinfo])
 ACX_FEATURE([enable],[hwinfo])
+ACX_FEATURE([disable],[standalone], $disable_standalone)

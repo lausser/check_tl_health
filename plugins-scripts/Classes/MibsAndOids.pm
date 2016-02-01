@@ -1,6 +1,14 @@
-$GLPlugin::SNMP::discover_ids = {};
+{
+  no warnings qw(once);
+  $Monitoring::GLPlugin::SNMP::discover_ids = {};
+  $Monitoring::GLPlugin::SNMP::mib_ids = {};
+  $Monitoring::GLPlugin::SNMP::mibs_and_oids = {};
+  $Monitoring::GLPlugin::SNMP::definitions = {};
+}
 
-$GLPlugin::SNMP::mib_ids = {
+$Monitoring::GLPlugin::SNMP::discover_ids = {};
+
+$Monitoring::GLPlugin::SNMP::mib_ids = {
   'SEMI-MIB' => '1.3.6.1.4.1.11.10.2.1.3.25',
   'QUANTUM-SMALL-TAPE-LIBRARY-MIB' => '1.3.6.1.4.1.3697',
   'SPECTRALOGIC-GLOBAL-REG-SLHARDWARE-SLLIBRARIES-SLTSERIES' => '1.3.6.1.4.1.3478.1.1.3',
@@ -9,7 +17,7 @@ $GLPlugin::SNMP::mib_ids = {
   'BDT-MIB' => '1.3.6.1.4.1.20884.10893.2.101.1', # bDTAgentInfo
 };
 
-$GLPlugin::SNMP::mibs_and_oids = {
+$Monitoring::GLPlugin::SNMP::mibs_and_oids = {
   'MIB-II' => {
       sysDescr => '1.3.6.1.2.1.1.1',
       sysObjectID => '1.3.6.1.2.1.1.2',
@@ -106,8 +114,8 @@ $GLPlugin::SNMP::mibs_and_oids = {
       libraryIpAddress => '1.3.6.1.4.1.3697.1.10.10.1.1',
       libraryProductName => '1.3.6.1.4.1.3697.1.10.10.1.10',
       libraryFirmwareVersion => '1.3.6.1.4.1.3697.1.10.10.1.11',
-      physicalLibrary => '1.3.6.1.4.1.3697.1.10.10.1.15',
-      physicalLibraryState => 'QUANTUM-SMALL-TAPE-LIBRARY-MIB::LibraryReadyState',
+      physicalLibraryState => '1.3.6.1.4.1.3697.1.10.10.1.15.1',
+      physicalLibraryStateDefinition => 'QUANTUM-SMALL-TAPE-LIBRARY-MIB::LibraryReadyState',
       rasSubSystem => '1.3.6.1.4.1.3697.1.10.10.1.15.10',
       powerStatus => '1.3.6.1.4.1.3697.1.10.10.1.15.10.1',
       powerStatusDefinition => 'QUANTUM-SMALL-TAPE-LIBRARY-MIB::RASSubSystemStatus',
@@ -1959,7 +1967,7 @@ $GLPlugin::SNMP::mibs_and_oids = {
   },
 };
 
-$GLPlugin::SNMP::definitions = {
+$Monitoring::GLPlugin::SNMP::definitions = {
   'SEMI-MIB' => {
      hpHttpMgHealth => {
        1 => 'unknown',
@@ -2458,7 +2466,7 @@ $GLPlugin::SNMP::definitions = {
   },
 };
 
-$GLPlugin::SNMP::mibdepot = [
+$Monitoring::GLPlugin::SNMP::mibdepot = [
   ['1.3.6.1.4.1.3697', 'quantum', 'v2', 'QUANTUM-SMALL-TAPE-LIBRARY-MIB'],
   ['1.3.6.1.4.1.3764.1.1.200.20', 'adic', 'v2', 'ADIC-MANAGEMENT-MIB'],
   ['1.3.6.1.4.1.3764.1.1', 'adic', 'v2', 'ADIC-INTELLIGENT-STORAGE-MIB'],

@@ -1,5 +1,5 @@
 package Classes::Spectralogic::TSeries::T950::Components::EnvironmentalSubsystem;
-our @ISA = qw(GLPlugin::SNMP::Item);
+our @ISA = qw(Monitoring::GLPlugin::SNMP::Item);
 use strict;
 
 sub init {
@@ -11,13 +11,13 @@ sub init {
       slT950GeneralStatusTap2Status
   )));
   $self->get_snmp_tables('SL-HW-LIB-T950-MIB', [
-    ['partitions', 'slT950GeneralStatusPartitionTable', 'GLPlugin::SNMP::TableItem' ],
+    ['partitions', 'slT950GeneralStatusPartitionTable', 'Monitoring::GLPlugin::SNMP::TableItem' ],
     ['messages', 'slT950MessageTable', 'Classes::Spectralogic::TSeries::T950::Components::EnvironmentalSubsystem::Message' ],
   ]);
   if (grep { ! exists $_->{slT950MessageTime}} @{$self->{messages}}) {
-    $GLPlugin::SNMP::session->max_msg_size(1024*63);
+    $self->mult_max_msg_size(63);
     $self->{messages} = [];
-    delete $GLPlugin::SNMP::tablecache->{'SL-HW-LIB-T950-MIB'}->{'slT950MessageTable'};
+    $self->clear_table_cache('SL-HW-LIB-T950-MIB', 'slT950MessageTable');
     # sonst fehlen slT950MessageRemedyText und slT950MessageTime
     $self->get_snmp_tables('SL-HW-LIB-T950-MIB', [
       ['messages', 'slT950MessageTable', 'Classes::Spectralogic::TSeries::T950::Components::EnvironmentalSubsystem::Message' ],
@@ -57,7 +57,7 @@ sub check {
 
 
 package Classes::Spectralogic::TSeries::T950::Components::EnvironmentalSubsystem::Message;
-our @ISA = qw(GLPlugin::SNMP::TableItem);
+our @ISA = qw(Monitoring::GLPlugin::SNMP::TableItem);
 use strict;
 
 sub check {
