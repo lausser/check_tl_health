@@ -1,14 +1,13 @@
 libexec_SCRIPTS=check_tl_health
 GL_MODULES=\
+  ../GLPlugin/lib/Monitoring/GLPlugin/Commandline/Extraopts.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/Commandline/Getopt.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/Commandline.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/Item.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/TableItem.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP.pm \
-  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/CSF.pm \
-  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/Item.pm \
-  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/TableItem.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/SysDescPrettify.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/MIB2MIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/SNMPFRAMEWORKMIB.pm \
@@ -16,12 +15,19 @@ GL_MODULES=\
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/ADICINTELLIGENTSTORAGEMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/ADICMANAGEMENTMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/QUANTUMSMALLTAPELIBRARYMIB.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/QUANTUMSNMPMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/SEMIMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/SLHWLIBT950MIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/SPECTRALOGICGLOBALREG.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/SPECTRALOGICGLOBALREGSLHARDWARESLLIBRARIESSLTSERIES.pm \
-  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/UCDSNMPMIB.pm
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/UCDSNMPMIB.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/HOSTRESOURCESMIB.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/CSF.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/Item.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/TableItem.pm
 EXTRA_MODULES=\
+  Classes/Quantum/QUANTUMSNMPMIB/Components/EnvironmentalSubsystem.pm \
+  Classes/Quantum/QUANTUMSNMPMIB.pm \
   Classes/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
   Classes/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
   Classes/Quantum/I40I80/Components/DriveSubsystem.pm \
@@ -44,6 +50,13 @@ EXTRA_MODULES=\
   Classes/BDT/FlexStorII/Components/EnvironmentalSubsystem.pm \
   Classes/BDT/FlexStorII.pm \
   Classes/BDT.pm \
+  Classes/HOSTRESOURCESMIB/Component/CpuSubsystem.pm \
+  Classes/HOSTRESOURCESMIB/Component/DeviceSubsystem.pm \
+  Classes/HOSTRESOURCESMIB/Component/DiskSubsystem.pm \
+  Classes/HOSTRESOURCESMIB/Component/EnvironmentalSubsystem.pm \
+  Classes/HOSTRESOURCESMIB/Component/MemSubsystem.pm \
+  Classes/HOSTRESOURCESMIB/Component/UptimeSubsystem.pm \
+  Classes/HOSTRESOURCESMIB.pm \
   Classes/Device.pm
 
 SED=/bin/sed
