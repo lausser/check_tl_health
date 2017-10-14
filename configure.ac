@@ -2,7 +2,8 @@ dnl Process this file with autoconf to produce a configure script.
 AC_REVISION ($Revision: 1.150 $)
 AC_PREREQ(2.58)
 AC_INIT(check_tl_health,1.4.1)
-AM_INIT_AUTOMAKE([tar-pax])
+AM_INIT_AUTOMAKE([1.9 tar-pax])
+AM_MAINTAINER_MODE([disable])
 AC_CANONICAL_HOST
 
 RELEASE=1
@@ -37,51 +38,6 @@ AC_SUBST(with_nagios_user)
 AC_SUBST(with_nagios_group)
 INSTALL_OPTS="-o $with_nagios_user -g $with_nagios_group"
 AC_SUBST(INSTALL_OPTS)
-AC_ARG_WITH(degrees,
-  ACX_HELP_STRING([--with-degrees=UNIT],
-    [which temperature unit to use. (celsius or fahrenheit)]),
-  with_degrees=$withval,
-  with_degrees=unknown)
-case "$with_degrees" in
-  fahrenheit)
-    AC_SUBST(CELSIUS, 0)
-    ;;
-  *)
-    AC_SUBST(CELSIUS, 1)
-    ;;
-esac
-AC_ARG_ENABLE([perfdata],
-[  --enable-perfdata       wether to output perfdata (default=no)], ,enable_perfdata=no)
-if test x"$enable_perfdata" = xyes ; then
-  AC_SUBST(PERFDATA, 1)
-else
-  AC_SUBST(PERFDATA, 0)
-fi
-AC_ARG_ENABLE([extendedinfo],
-[  --enable-extendedinfo   wether to output extended info (default=no)], ,enable_extendedinfo=no)
-if test x"$enable_extendedinfo" = xyes ; then
-  AC_SUBST(EXTENDEDINFO, 1)
-else
-  AC_SUBST(EXTENDEDINFO, 0)
-fi
-AC_ARG_ENABLE([hwinfo],
-[  --disable-hwinfo        wether to output model desc., serial no., bios version (default=yes)], ,enable_hwinfo=yes)
-
-if test x"$enable_hwinfo" = xyes ; then
-  AC_SUBST(HWINFO, 1)
-else
-  AC_SUBST(HWINFO, 0)
-fi
-
-
-case "$host_os" in 
-  *hp*)
-    defaulttrustedpath=/bin:/sbin:/usr/bin:/usr/sbin:/usr/contrib/bin
-    ;;
-  *)
-    defaulttrustedpath=/bin:/sbin:/usr/bin:/usr/sbin
-    ;;
-esac
 
 EXTRAS=
 dnl PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/etc:/usr/local/bin:/usr/local/sbin:$PATH
@@ -99,19 +55,11 @@ AC_SUBST(PERL, $with_perl)
 
 AC_ARG_ENABLE([standalone],
     AS_HELP_STRING([--disable-standalone], [Disable feature standalone]))
-AS_IF([test "x$enable_standalone" != "xno"], [
-  dnl Do the stuff needed for enabling the feature
-])
 AM_CONDITIONAL([DISABLE_STANDALONE], [test "$enable_standalone" = "no"])
 
-AC_OUTPUT(Makefile plugins-scripts/Makefile plugins-scripts/subst doc/Makefile)
+AC_OUTPUT(Makefile plugins-scripts/Makefile plugins-scripts/subst)
 
 ACX_FEATURE([with],[perl])
 ACX_FEATURE([with],[nagios-user])
 ACX_FEATURE([with],[nagios-group])
-ACX_FEATURE([with],[noinst-level])
-ACX_FEATURE([with],[degrees])
-ACX_FEATURE([enable],[perfdata])
-ACX_FEATURE([enable],[extendedinfo])
-ACX_FEATURE([enable],[hwinfo])
 ACX_FEATURE([disable],[standalone], $disable_standalone)
