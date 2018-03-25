@@ -1,3 +1,7 @@
+* 2018-03-26 1.5.0.1
+  add quantum-midrange
+* 2018-01-25 1.5
+  simplify adic/quantum
 * 2017-10-12 1.4.1
   add quantum-snmp-mib for DXi series
 * 2016-02-08 1.4

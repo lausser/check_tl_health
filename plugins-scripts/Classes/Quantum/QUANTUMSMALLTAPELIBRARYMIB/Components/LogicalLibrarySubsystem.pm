@@ -1,11 +1,11 @@
-package Classes::Quantum::I40I80::Components::LogicalLibrarySubsystem;
+package Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB::Components::LogicalLibrarySubsystem;
 our @ISA = qw(Monitoring::GLPlugin::SNMP::Item);
 use strict;
 
 sub init {
   my $self = shift;
   $self->get_snmp_tables('QUANTUM-SMALL-TAPE-LIBRARY-MIB', [
-      ['logical_libraries', 'logicalLibraryTable', 'Classes::Quantum::I40I80::Components::LogicalLibrary'],
+      ['logical_libraries', 'logicalLibraryTable', 'Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB::Components::LogicalLibrary'],
   ]);
 }
 
@@ -18,7 +18,7 @@ sub check {
 }
 
 
-package Classes::Quantum::I40I80::Components::LogicalLibrary;
+package Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB::Components::LogicalLibrary;
 our @ISA = qw(Monitoring::GLPlugin::SNMP::TableItem);
 use strict;
 

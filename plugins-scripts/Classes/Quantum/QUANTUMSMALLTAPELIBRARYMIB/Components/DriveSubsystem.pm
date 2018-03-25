@@ -1,11 +1,11 @@
-package Classes::Quantum::I40I80::Components::DriveSubsystem;
+package Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB::Components::DriveSubsystem;
 our @ISA = qw(Monitoring::GLPlugin::SNMP::Item);
 use strict;
 
 sub init {
   my $self = shift;
   $self->get_snmp_tables('QUANTUM-SMALL-TAPE-LIBRARY-MIB', [
-      ['phycsical_drives', 'physicalDriveTable', 'Classes::Quantum::I40I80::Components::PhysicalDrive'],
+      ['phycsical_drives', 'physicalDriveTable', 'Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB::Components::PhysicalDrive'],
   ]);
   $self->get_snmp_objects('QUANTUM-SMALL-TAPE-LIBRARY-MIB', (qw(
       numPhDrives overallPhDriveOnlineStatus overallPhDriveReadinessStatus)));
@@ -29,7 +29,7 @@ sub check {
 }
 
 
-package Classes::Quantum::I40I80::Components::PhysicalDrive;
+package Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB::Components::PhysicalDrive;
 our @ISA = qw(Monitoring::GLPlugin::SNMP::TableItem);
 use strict;
 

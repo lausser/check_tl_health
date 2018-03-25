@@ -4,9 +4,18 @@ use strict;
 
 sub init {
   my $self = shift;
-  if ($self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryModel', 0) && $self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryModel', 0) =~ /Scalar\s+i\d+/i) {
-    bless $self, 'Classes::Quantum::I40I80';
-    $self->debug('using Classes::Quantum::I40I80');
+  if ($self->implements_mib('ADIC-TAPE-LIBRARY-MIB')) {
+    bless $self, 'Classes::Quantum::ADICTAPELIBRARYMIB';
+    $self->debug('using Classes::Quantum::ADICTAPELIBRARYMIB');
+  } elsif ($self->implements_mib('QUANTUM-SMALL-TAPE-LIBRARY-MIB')) {
+    bless $self, 'Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB';
+    $self->debug('using Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB');
+  } elsif ($self->implements_mib('QUANTUM-MIDRANGE-TAPE-LIBRARY-MIB')) {
+    bless $self, 'Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB';
+    $self->debug('using Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB');
+  } elsif ($self->implements_mib('ADIC-INTELLIGENT-STORAGE-MIB')) {
+    bless $self, 'Classes::Quantum::ADICINTELLIGENTSTORAGEMIB';
+    $self->debug('using Classes::Quantum::ADICINTELLIGENTSTORAGEMIB');
   } elsif ($self->implements_mib('QUANTUM-SNMP-MIB')) {
     bless $self, 'Classes::Quantum::QUANTUMSNMPMIB';
     $self->debug('using Classes::Quantum::QUANTUMSNMPMIB');

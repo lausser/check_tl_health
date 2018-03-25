@@ -14,6 +14,8 @@ GL_MODULES=\
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/BDTMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/ADICINTELLIGENTSTORAGEMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/ADICMANAGEMENTMIB.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/ADICTAPELIBRARYMIB.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/QUANTUMMIDRANGETAPELIBRARYMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/QUANTUMSMALLTAPELIBRARYMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/QUANTUMSNMPMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/SEMIMIB.pm \
@@ -26,12 +28,26 @@ GL_MODULES=\
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/Item.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/TableItem.pm
 EXTRA_MODULES=\
-  Classes/Quantum/QUANTUMSNMPMIB/Components/EnvironmentalSubsystem.pm \
+  Classes/Quantum/ADICINTELLIGENTSTORAGEMIB.pm \
+  Classes/Quantum/ADICINTELLIGENTSTORAGEMIB/Components/ComponentSubsystem.pm \
+  Classes/Quantum/ADICINTELLIGENTSTORAGEMIB/Components/EnvironmentalSubsystem.pm \
+  Classes/Quantum/ADICINTELLIGENTSTORAGEMIB/Components/RasSubsystem.pm \
+  Classes/Quantum/ADICTAPELIBRARYMIB.pm \
+  Classes/Quantum/ADICTAPELIBRARYMIB/Components/DriveSubsystem.pm \
+  Classes/Quantum/ADICTAPELIBRARYMIB/Components/EnvironmentalSubsystem.pm \
+  Classes/Quantum/ADICTAPELIBRARYMIB/Components/LogicalLibrarySubsystem.pm \
+  Classes/Quantum/QUANTUMMIDRANGETAPELIBRARYMIB.pm \
+  Classes/Quantum/QUANTUMMIDRANGETAPELIBRARYMIB/Components/DriveSubsystem.pm \
+  Classes/Quantum/QUANTUMMIDRANGETAPELIBRARYMIB/Components/EnvironmentalSubsystem.pm \
+  Classes/Quantum/QUANTUMMIDRANGETAPELIBRARYMIB/Components/VoltageSubsystem.pm \
+  Classes/Quantum/QUANTUMMIDRANGETAPELIBRARYMIB/Components/PowersupplySubsystem.pm \
+  Classes/Quantum/QUANTUMMIDRANGETAPELIBRARYMIB/Components/LogicalLibrarySubsystem.pm \
+  Classes/Quantum/QUANTUMSMALLTAPELIBRARYMIB.pm \
+  Classes/Quantum/QUANTUMSMALLTAPELIBRARYMIB/Components/DriveSubsystem.pm \
+  Classes/Quantum/QUANTUMSMALLTAPELIBRARYMIB/Components/EnvironmentalSubsystem.pm \
+  Classes/Quantum/QUANTUMSMALLTAPELIBRARYMIB/Components/LogicalLibrarySubsystem.pm \
   Classes/Quantum/QUANTUMSNMPMIB.pm \
-  Classes/Quantum/I40I80/Components/EnvironmentalSubsystem.pm \
-  Classes/Quantum/I40I80/Components/LogicalLibrarySubsystem.pm \
-  Classes/Quantum/I40I80/Components/DriveSubsystem.pm \
-  Classes/Quantum/I40I80.pm \
+  Classes/Quantum/QUANTUMSNMPMIB/Components/EnvironmentalSubsystem.pm \
   Classes/Quantum.pm \
   Classes/HP/SEMIMIB/Components/EnvironmentalSubsystem.pm \
   Classes/HP/SEMIMIB.pm \
@@ -43,10 +59,6 @@ EXTRA_MODULES=\
   Classes/UCDMIB/Components/MemSubsystem.pm \
   Classes/UCDMIB/Components/CpuSubsystem.pm \
   Classes/UCDMIB.pm \
-  Classes/Adic/Components/ComponentSubsystem.pm \
-  Classes/Adic/Components/EnvironmentalSubsystem.pm \
-  Classes/Adic/Components/RasSubsystem.pm \
-  Classes/Adic.pm \
   Classes/BDT/FlexStorII/Components/EnvironmentalSubsystem.pm \
   Classes/BDT/FlexStorII.pm \
   Classes/BDT.pm \

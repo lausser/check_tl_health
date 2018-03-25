@@ -1,4 +1,4 @@
-package Classes::Adic::Components::EnvironmentalSubsystem;
+package Classes::Quantum::ADICINTELLIGENTSTORAGEMIB::Components::EnvironmentalSubsystem;
 our @ISA = qw(Monitoring::GLPlugin::SNMP::Item);
 use strict;
 
@@ -11,7 +11,7 @@ sub init {
       agentGlobalStatus agentLastGlobalStatus agentTimeStamp 
   )));
   #$self->analyze_and_check_environmental_subsystem('Classes::Adic::Components::ComponentSubsystem');
-  $self->analyze_and_check_environmental_subsystem('Classes::Adic::Components::RasSubsystem');
+  $self->analyze_and_check_environmental_subsystem('Classes::Quantum::ADICINTELLIGENTSTORAGEMIB::Components::RasSubsystem');
 }
 
 sub dump {

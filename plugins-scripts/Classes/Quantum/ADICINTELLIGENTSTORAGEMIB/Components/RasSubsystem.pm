@@ -1,4 +1,4 @@
-package Classes::Adic::Components::RasSubsystem;
+package Classes::Quantum::ADICINTELLIGENTSTORAGEMIB::Components::RasSubsystem;
 our @ISA = qw(Monitoring::GLPlugin::SNMP::Item);
 use strict;
 
@@ -6,11 +6,11 @@ sub init {
   my $self = shift;
   use Data::Dumper;
   $self->get_snmp_tables('ADIC-MANAGEMENT-MIB', [
-    ['rassystems', 'rasSystemStatusTable', 'Classes::Adic::Components::RasSubsystem::RasSystem'],
+    ['rassystems', 'rasSystemStatusTable', 'Classes::Quantum::ADICINTELLIGENTSTORAGEMIB::Components::RasSubsystem::RasSystem'],
   ]);
 }
 
-package Classes::Adic::Components::RasSubsystem::RasSystem;
+package Classes::Quantum::ADICINTELLIGENTSTORAGEMIB::Components::RasSubsystem::RasSystem;
 our @ISA = qw(Monitoring::GLPlugin::SNMP::TableItem);
 use strict;
 

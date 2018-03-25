@@ -23,18 +23,24 @@ sub classify {
       } elsif ($self->implements_mib('SEMI-MIB')) {
         bless $self, 'Classes::HP::SEMIMIB';
         $self->debug('using Classes::HP::SEMIMIB');
-      } elsif ($self->get_snmp_object('QUANTUM-SMALL-TAPE-LIBRARY-MIB', 'libraryVendor', 0)) {
-        bless $self, 'Classes::Quantum';
-        $self->debug('using Classes::Quantum');
       } elsif ($self->implements_mib('QUANTUM-SNMP-MIB')) {
         bless $self, 'Classes::Quantum';
         $self->debug('using Classes::Quantum');
+      } elsif ($self->implements_mib('QUANTUM-SMALL-TAPE-LIBRARY-MIB')) {
+        bless $self, 'Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB';
+        $self->debug('using Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB');
+      } elsif ($self->implements_mib('QUANTUM-MIDRANGE-TAPE-LIBRARY-MIB')) {
+        bless $self, 'Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB';
+        $self->debug('using Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB');
+      } elsif ($self->implements_mib('ADIC-INTELLIGENT-STORAGE-MIB')) {
+        bless $self, 'Classes::Quantum';
+        $self->debug('using Quantum');
+      } elsif ($self->implements_mib('ADIC-TAPE-LIBRARY-MIB')) {
+        bless $self, 'Classes::Quantum';
+        $self->debug('using Quantum');
       } elsif ($self->implements_mib('SPECTRALOGIC-GLOBAL-REG-SLHARDWARE-SLLIBRARIES-SLTSERIES')) {
         bless $self, 'Classes::Spectralogic::TSeries';
         $self->debug('using Classes::Spectralogic::TSeries');
-      } elsif ($self->implements_mib('ADIC-INTELLIGENT-STORAGE-MIB')) {
-        bless $self, 'Classes::Adic';
-        $self->debug('using Adic');
       } elsif ($self->implements_mib('BDT-MIB')) {
         bless $self, 'Classes::BDT';
         $self->debug('using BDT');
