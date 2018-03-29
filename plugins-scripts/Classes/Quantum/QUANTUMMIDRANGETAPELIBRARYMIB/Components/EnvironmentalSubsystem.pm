@@ -15,7 +15,7 @@ sub init {
 
 sub check {
   my ($self) = @_;
-  $self->add_info(sprintf "lib global status is %s",
+  $self->add_info(sprintf "library overall status is %s",
       $self->{libraryGlobalStatus});
   if ($self->{libraryGlobalStatus} eq "unknown") {
     $self->add_unknown();
@@ -34,7 +34,7 @@ sub check {
   } else {
     $self->add_unknown();
   }
-  $self->add_info(sprintf "lib global status is %s",
+  $self->add_info(sprintf "library ras status is %s",
       $self->{libraryRASStatus});
   if ($self->{libraryRASStatus} eq "unknown") {
     $self->add_unknown();
