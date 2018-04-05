@@ -58,8 +58,11 @@ sub check {
     $self->set_level(CRITICAL);
     push(@{$states->{CRITICAL}}, ['aggregatedIEDoorStatus', $self->{aggregatedIEDoorStatus}]);
   } elsif ($self->{aggregatedIEDoorStatus} eq 'closedAndUnLocked') {
-    $self->set_level(WARNING);
-    push(@{$states->{WARNING}}, ['aggregatedIEDoorStatus', $self->{aggregatedIEDoorStatus}]);
+    # der IE slot ist irgendein Wartungsschacht, der bei den meisten gar nicht
+    # abschliessbar ist. Und locked bedeutet wohl auch: da flitzen jetzt keine
+    # Roboterarme rum, damit man reinlangen kann.
+    #$self->set_level(WARNING);
+    #push(@{$states->{WARNING}}, ['aggregatedIEDoorStatus', $self->{aggregatedIEDoorStatus}]);
   }
   $self->add_info(sprintf 'overall states: %s', join(' ', map { $_->[0].'='.$_->[1] } map { my $x = $_->[0]; $x =~ s/Status//; [$x, $_->[1]] } (@{$states->{CRITICAL}}, @{$states->{WARNING}}, @{$states->{UNKNOWN}}, @{$states->{OK}})));
   if ($self->get_level()) {
