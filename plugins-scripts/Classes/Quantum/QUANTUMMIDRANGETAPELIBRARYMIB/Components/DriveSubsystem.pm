@@ -8,7 +8,9 @@ sub init {
       ['phycsical_drives', 'physicalDriveTable', 'Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB::Components::PhysicalDrive'],
   ]);
   $self->get_snmp_objects('QUANTUM-MIDRANGE-TAPE-LIBRARY-MIB', (qw(
-      libraryPhDriveCount driveRASStatus mediaRASStatus)));
+      libraryPhDriveCount driveRASStatus mediaRASStatus
+      aggregatedMagazineStatus phDriveCleaningStatus
+  )));
 }
 
 sub check {
@@ -32,6 +34,22 @@ sub check {
     $self->add_ok();
   } else {
     $self->add_unknown();
+  }
+  $self->add_info('checking magazin status');
+  $self->add_info(sprintf 'overall magazine status %s',
+      $self->{aggregatedMagazineStatus});
+  if ($self->{aggregatedMagazineStatus} eq "notAllPresent") {
+    if (defined $self->opts->mitigation()) {
+      $self->add_message($self->opts->mitigation());
+    } else {
+      $self->add_warning();
+    }
+  }
+  $self->add_info('checking cleaning status');
+  $self->add_info(sprintf 'cleaning status %s',
+      $self->{phDriveCleaningStatus});
+  if ($self->{phDriveCleaningStatus} eq "required") {
+    $self->add_warning();
   }
   $self->SUPER::check();
 }
