@@ -9,7 +9,7 @@ sub init {
   ]);
   $self->get_snmp_objects('QUANTUM-MIDRANGE-TAPE-LIBRARY-MIB', (qw(
       libraryPhDriveCount driveRASStatus mediaRASStatus
-      aggregatedMagazineStatus phDriveCleaningStatus
+      aggregatedMagazineStatus
   )));
 }
 
@@ -44,12 +44,6 @@ sub check {
     } else {
       $self->add_warning();
     }
-  }
-  $self->add_info('checking cleaning status');
-  $self->add_info(sprintf 'cleaning status %s',
-      $self->{phDriveCleaningStatus});
-  if ($self->{phDriveCleaningStatus} eq "required") {
-    $self->add_warning();
   }
   $self->SUPER::check();
 }
