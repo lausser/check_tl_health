@@ -7,6 +7,23 @@ sub classify {
   if (! ($self->opts->hostname || $self->opts->snmpwalk)) {
     $self->add_unknown('either specify a hostname or a snmpwalk file');
   } else {
+    $self->{broken_snmp_agent} = [
+      sub {
+        my $productElementName =
+            $self->get_snmp_object('SNIA-SML-MIB', 'product-ElementName');
+        if ($productElementName) {
+          $self->{productname} = $productElementName;
+          $self->{uptime} = $self->timeticks(100 * 3600);
+          my $sysobj = $self->get_snmp_object('MIB-2-MIB', 'sysObjectID', 0);
+          if (! $sysobj) {
+            $self->add_rawdata('1.3.6.1.2.1.1.2.0', "mirhanvomwolddahoam");
+          }
+          return 1;
+        } else {
+          return 0;
+        }
+      },
+    ];
     $self->check_snmp_and_model();
     if ($self->opts->servertype) {
       $self->{productname} = 'storeever' if $self->opts->servertype eq 'storeever';
@@ -44,6 +61,9 @@ sub classify {
       } elsif ($self->implements_mib('BDT-MIB')) {
         bless $self, 'Classes::BDT';
         $self->debug('using BDT');
+      } elsif ($self->{productname} =~ /IBM /) {
+        bless $self, 'Classes::IBM';
+        $self->debug('using Classes::IBM');
       } else {
         if (my $class = $self->discover_suitable_class()) {
           bless $self, $class;
