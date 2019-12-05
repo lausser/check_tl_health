@@ -35,41 +35,41 @@ sub classify {
       if ($self->opts->mode =~ /^my-/) {
         $self->load_my_extension();
       } elsif ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
-        bless $self, 'Classes::HP';
+        $self->rebless('Classes::HP');
         $self->debug('using Classes::HP');
       } elsif ($self->implements_mib('SEMI-MIB')) {
-        bless $self, 'Classes::HP::SEMIMIB';
+        $self->rebless('Classes::HP::SEMIMIB');
         $self->debug('using Classes::HP::SEMIMIB');
       } elsif ($self->implements_mib('QUANTUM-SNMP-MIB')) {
-        bless $self, 'Classes::Quantum';
+        $self->rebless('Classes::Quantum');
         $self->debug('using Classes::Quantum');
       } elsif ($self->implements_mib('QUANTUM-SMALL-TAPE-LIBRARY-MIB')) {
-        bless $self, 'Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB';
+        $self->rebless('Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB');
         $self->debug('using Classes::Quantum::QUANTUMSMALLTAPELIBRARYMIB');
       } elsif ($self->implements_mib('QUANTUM-MIDRANGE-TAPE-LIBRARY-MIB')) {
-        bless $self, 'Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB';
+        $self->rebless('Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB');
         $self->debug('using Classes::Quantum::QUANTUMMIDRANGETAPELIBRARYMIB');
       } elsif ($self->implements_mib('ADIC-INTELLIGENT-STORAGE-MIB')) {
-        bless $self, 'Classes::Quantum';
+        $self->rebless('Classes::Quantum');
         $self->debug('using Quantum');
       } elsif ($self->implements_mib('ADIC-TAPE-LIBRARY-MIB')) {
-        bless $self, 'Classes::Quantum';
+        $self->rebless('Classes::Quantum');
         $self->debug('using Quantum');
       } elsif ($self->implements_mib('SPECTRALOGIC-GLOBAL-REG-SLHARDWARE-SLLIBRARIES-SLTSERIES')) {
-        bless $self, 'Classes::Spectralogic::TSeries';
+        $self->rebless('Classes::Spectralogic::TSeries');
         $self->debug('using Classes::Spectralogic::TSeries');
       } elsif ($self->implements_mib('BDT-MIB')) {
-        bless $self, 'Classes::BDT';
+        $self->rebless('Classes::BDT');
         $self->debug('using BDT');
       } elsif ($self->{productname} =~ /IBM /) {
-        bless $self, 'Classes::IBM';
+        $self->rebless('Classes::IBM');
         $self->debug('using Classes::IBM');
       } else {
         if (my $class = $self->discover_suitable_class()) {
-          bless $self, $class;
+          $self->rebless($class);
           $self->debug('using '.$class);
         } else {
-          bless $self, 'Classes::Generic';
+          $self->rebless('Classes::Generic');
           $self->debug('using Classes::Generic');
         }
       }
@@ -87,7 +87,7 @@ sub init {
   my $self = shift;
   if ($self->mode =~ /something specific/) {
   } else {
-    bless $self, 'Monitoring::GLPlugin::SNMP';
+    $self->rebless('Monitoring::GLPlugin::SNMP');
     $self->no_such_mode();
   }
 }
