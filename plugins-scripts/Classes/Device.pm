@@ -19,9 +19,17 @@ sub classify {
             $self->add_rawdata('1.3.6.1.2.1.1.2.0', "mirhanvomwolddahoam");
           }
           return 1;
-        } else {
-          return 0;
         }
+        my $ksComplexName =
+            $self->get_snmp_object('STREAMLINE-TAPE-LIBRARY4J-MIB', 'ksComplexName');
+        if ($ksComplexName) {
+          my $sysUptime = $self->get_snmp_object('MIB-2-MIB', 'sysUpTime', 0);
+          $self->{uptime} = $self->timeticks($sysUptime);
+
+          $self->{productname} = $ksComplexName;
+          return 1;
+        }
+        return 0;
       },
     ];
     $self->check_snmp_and_model();
@@ -34,6 +42,9 @@ sub classify {
       }
       if ($self->opts->mode =~ /^my-/) {
         $self->load_my_extension();
+      } elsif ($self->implements_mib('STREAMLINE-TAPE-LIBRARY4J-MIB')) {
+        $self->rebless('Classes::Storagetek');
+        $self->debug('using Classes::Storagetek');
       } elsif ($self->{productname} =~ /(1\/8 G2)|(^ hp )|(storeever)/i) {
         $self->rebless('Classes::HP');
         $self->debug('using Classes::HP');

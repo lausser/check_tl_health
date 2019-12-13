@@ -26,6 +26,7 @@ GL_MODULES=\
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/HOSTRESOURCESMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/IBMTS4300MIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/IBMAUTOMATIONQUERYMIB.pm \
+  ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/STREAMLINETAPELIBRARY4JMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/MibsAndOids/SNIASMLMIB.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/CSF.pm \
   ../GLPlugin/lib/Monitoring/GLPlugin/SNMP/Item.pm \
@@ -75,6 +76,9 @@ EXTRA_MODULES=\
   Classes/IBM/TS4300/Components/EnvironmentalSubsystem.pm \
   Classes/IBM/TS4300.pm \
   Classes/IBM.pm \
+  Classes/Storagetek/SL4000/Components/EnvironmentalSubsystem.pm \
+  Classes/Storagetek/SL4000.pm \
+  Classes/Storagetek.pm \
   Classes/Device.pm
 
 SED=/bin/sed
